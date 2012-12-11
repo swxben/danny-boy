@@ -6,7 +6,7 @@ Simple data access layer for SQL Server
 
 ## Installation
 
-Install the engine via *[NuGet](http://nuget.org/packages/swxben.dataaccess)* (coming up), either in Visual Studio (right-click project, Manage NuGet Packages, search for docxtemplateengine) or via the package manager console using `Install-Package swxben.dataaccess`.
+Install the engine via [NuGet](http://nuget.org/packages/swxben.dataaccess), either in Visual Studio (right-click project, Manage NuGet Packages, search for docxtemplateengine) or via the package manager console using `Install-Package swxben.dataaccess`.
 
 
 ## Usage
