@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>swxben.dataaccess</id>
+    <version>0.1.0</version>
+    <title>swxben.dataaccess</title>
+    <authors>Ben Scott</authors>
+    <owners>Ben Scott</owners>
+    <licenseUrl>http://creativecommons.org/licenses/by-sa/3.0/</licenseUrl>
+    <projectUrl>https://github.com/swxben/swxben.dataaccess</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Simple data access layer for SQL Server</description>
+    <summary>Simple data access layer for SQL Server</summary>
+    <releaseNotes>Initial release</releaseNotes>
+    <tags>sqlserver dataaccess dal</tags>
+  </metadata>
+  <files>
+    <file src="src\swxben.dataaccess\bin\Release\swxben.dataaccess.dll" target="lib\net40\swxben.dataaccess.dll" />
+  </files>
+</package>
