@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 
 namespace swxben.dataaccess
 {
@@ -76,11 +77,21 @@ namespace swxben.dataaccess
                 var resultDictionary = result as IDictionary<string, object>;
                 var t = new T();
 
-                foreach (var property in typeof(T).GetProperties().Where(p => resultDictionary.ContainsKey(p.Name) && p.CanWrite))
+                var properties = typeof(T)
+                    .GetProperties()
+                    .Where(p => resultDictionary.ContainsKey(p.Name))
+                    .Where(p => p.CanWrite)
+                    .Where(p => !IgnoreAttribute.Test(p));
+                var fields = typeof(T)
+                    .GetFields()
+                    .Where(f => resultDictionary.ContainsKey(f.Name))
+                    .Where(f => !IgnoreAttribute.Test(f));
+
+                foreach (var property in properties)
                 {
                     property.SetValue(t, GetValue(resultDictionary[property.Name], property.PropertyType), null);
                 }
-                foreach (var field in typeof(T).GetFields().Where(f => resultDictionary.ContainsKey(f.Name)))
+                foreach (var field in fields)
                 {
                     field.SetValue(t, GetValue(resultDictionary[field.Name], field.FieldType));
                 }
@@ -91,15 +102,15 @@ namespace swxben.dataaccess
 
         private static object GetValue(object value, Type type)
         {
-            if (value != null && value is string)
-            {
-                if (type.IsEnum) return Enum.Parse(type, value as string);
+            if (value == null) return null;
+            if (!(value is string)) return value;
+            if (type.IsEnum) return Enum.Parse(type, value as string);
 
-                var underlyingType = Nullable.GetUnderlyingType(type);
+            var underlyingType = Nullable.GetUnderlyingType(type);
 
-                if (underlyingType == null) return value;
-                if (underlyingType.IsEnum) return Enum.Parse(underlyingType, value as string);
-            }
+            if (underlyingType == null) return value;
+            if (underlyingType.IsEnum) return Enum.Parse(underlyingType, value as string);
+
             return value;
         }
 
@@ -113,12 +124,16 @@ namespace swxben.dataaccess
 
             if (parameters != null)
             {
-                foreach (var property in parameters.GetType().GetProperties())
+                var properties = parameters.GetType().GetProperties()
+                    .Where(p => !IgnoreAttribute.Test(p));
+                var fields = parameters.GetType().GetFields()
+                    .Where(f => !IgnoreAttribute.Test(f));
+                foreach (var property in properties)
                 {
                     var value = property.GetValue(parameters, null);
                     AddParameterValueToCommand(command, property.Name, value);
                 }
-                foreach (var field in parameters.GetType().GetFields())
+                foreach (var field in fields)
                 {
                     var value = field.GetValue(parameters);
                     AddParameterValueToCommand(command, field.Name, value);
@@ -201,9 +216,9 @@ namespace swxben.dataaccess
         }
         private static IEnumerable<string> GetAllFieldNames(Type t)
         {
-            return
-                t.GetFields().Select(f => f.Name)
-                .Concat(t.GetProperties().Select(p => p.Name));
+            var fieldNames = t.GetFields().Where(f => !IgnoreAttribute.Test(f)).Select(f => f.Name);
+            var propertyNames = t.GetProperties().Where(p => !IgnoreAttribute.Test(p)).Select(p => p.Name);
+            return fieldNames.Concat(propertyNames);
         }
 
         public IEnumerable<T> Select<T>(
@@ -262,6 +277,13 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]')
             {
                 return ex;
             }
+        }
+
+        [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+        public class IgnoreAttribute : Attribute
+        {
+            public static bool Test(FieldInfo field) { return Attribute.IsDefined(field, typeof(IgnoreAttribute)); }
+            public static bool Test(PropertyInfo property) { return Attribute.IsDefined(property, typeof(IgnoreAttribute)); }
         }
     }
 }
