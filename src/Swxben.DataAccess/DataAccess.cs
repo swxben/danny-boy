@@ -3,28 +3,19 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
-using System.Text;
 using System.Reflection;
 
 namespace swxben.dataaccess
 {
-    public interface IDataAccess
-    {
-        int ExecuteCommand(string sql, object parameters = null);
-        IEnumerable<dynamic> ExecuteQuery(string sql, object parameters = null);
-        IEnumerable<T> ExecuteQuery<T>(string sql, object parameters = null) where T : new();
-        void Insert<T>(T value);
-        void Update<T>(T value, string id);
-        void DropTable(string tableName);
-        IEnumerable<T> Select<T>(
-            object where = null,
-            string orderBy = null
-            ) where T : new();
-        Exception TestConnection();
-    }
-
     public class DataAccess : IDataAccess
     {
+        [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+        public class IgnoreAttribute : Attribute
+        {
+            public static bool Test(FieldInfo field) { return Attribute.IsDefined(field, typeof(IgnoreAttribute)); }
+            public static bool Test(PropertyInfo property) { return Attribute.IsDefined(property, typeof(IgnoreAttribute)); }
+        }
+
         string _connectionString = "";
 
         public DataAccess(string connectionString)
@@ -36,7 +27,7 @@ namespace swxben.dataaccess
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                var command = GetCommand(sql, connection, parameters);
+                var command = DataAccessSqlGeneration.GetCommand(sql, connection, parameters);
 
                 connection.Open();
 
@@ -48,7 +39,7 @@ namespace swxben.dataaccess
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                var command = GetCommand(sql, connection, parameters);
+                var command = DataAccessSqlGeneration.GetCommand(sql, connection, parameters);
 
                 connection.Open();
 
@@ -89,75 +80,15 @@ namespace swxben.dataaccess
 
                 foreach (var property in properties)
                 {
-                    property.SetValue(t, GetValue(resultDictionary[property.Name], property.PropertyType), null);
+                    property.SetValue(t, DataAccessSqlGeneration.GetValue(resultDictionary[property.Name], property.PropertyType), null);
                 }
                 foreach (var field in fields)
                 {
-                    field.SetValue(t, GetValue(resultDictionary[field.Name], field.FieldType));
+                    field.SetValue(t, DataAccessSqlGeneration.GetValue(resultDictionary[field.Name], field.FieldType));
                 }
 
                 return t;
             });
-        }
-
-        private static object GetValue(object value, Type type)
-        {
-            if (value == null) return null;
-            if (!(value is string)) return value;
-            if (type.IsEnum) return Enum.Parse(type, value as string);
-
-            var underlyingType = Nullable.GetUnderlyingType(type);
-
-            if (underlyingType == null) return value;
-            if (underlyingType.IsEnum) return Enum.Parse(underlyingType, value as string);
-
-            return value;
-        }
-
-        private static SqlCommand GetCommand(string sql, SqlConnection connection, object parameters)
-        {
-            var command = new SqlCommand();
-
-            command.CommandType = System.Data.CommandType.Text;
-            command.Connection = connection;
-            command.CommandText = sql;
-
-            if (parameters != null)
-            {
-                var properties = parameters.GetType().GetProperties()
-                    .Where(p => !IgnoreAttribute.Test(p));
-                var fields = parameters.GetType().GetFields()
-                    .Where(f => !IgnoreAttribute.Test(f));
-                foreach (var property in properties)
-                {
-                    var value = property.GetValue(parameters, null);
-                    AddParameterValueToCommand(command, property.Name, value);
-                }
-                foreach (var field in fields)
-                {
-                    var value = field.GetValue(parameters);
-                    AddParameterValueToCommand(command, field.Name, value);
-                }
-            }
-
-            return command;
-        }
-
-        private static void AddParameterValueToCommand(SqlCommand command, string name, object value)
-        {
-            var parameter = command.CreateParameter();
-            parameter.ParameterName = string.Format("@{0}", name);
-
-            if (value != null && value.GetType().IsEnum) value = value.ToString();
-
-            parameter.Value = value == null ? DBNull.Value : value;
-
-            if (value != null && value.GetType() == typeof(string))
-            {
-                parameter.Size = ((string)value).Length > 4000 ? -1 : 4000;
-            }
-
-            command.Parameters.Add(parameter);
         }
 
         public void Insert<T>(T value)
@@ -170,56 +101,6 @@ namespace swxben.dataaccess
             ExecuteCommand(GetUpdateSqlFor<T>(id), value);
         }
 
-        public static string GetInsertSqlFor<T>()
-        {
-            var fieldsSql = new StringBuilder();
-            var valuesSql = new StringBuilder();
-            foreach (var field in GetAllFieldNames<T>())
-            {
-                if (!string.IsNullOrEmpty(fieldsSql.ToString()))
-                {
-                    fieldsSql.Append(", ");
-                    valuesSql.Append(", ");
-                }
-                fieldsSql.Append(field);
-                valuesSql.Append("@").Append(field);
-            }
-
-            return string.Format(
-                "INSERT INTO {0}s({1}) VALUES({2})",
-                typeof(T).Name,
-                fieldsSql,
-                valuesSql);
-        }
-
-        public static string GetUpdateSqlFor<T>(string id)
-        {
-            var set = new StringBuilder();
-
-            foreach (var field in GetAllFieldNames<T>())
-            {
-                if (field.ToUpper() == id.ToUpper()) continue;
-                if (!string.IsNullOrEmpty(set.ToString())) set.Append(", ");
-                set.AppendFormat("{0} = @{0}", field);
-            }
-
-            return string.Format(
-                "UPDATE {0}s SET {1} WHERE {2} = @{2}",
-                typeof(T).Name,
-                set,
-                id);
-        }
-
-        private static IEnumerable<string> GetAllFieldNames<T>()
-        {
-            return GetAllFieldNames(typeof(T));
-        }
-        private static IEnumerable<string> GetAllFieldNames(Type t)
-        {
-            var fieldNames = t.GetFields().Where(f => !IgnoreAttribute.Test(f)).Select(f => f.Name);
-            var propertyNames = t.GetProperties().Where(p => !IgnoreAttribute.Test(p)).Select(p => p.Name);
-            return fieldNames.Concat(propertyNames);
-        }
 
         public IEnumerable<T> Select<T>(
             object where = null,
@@ -230,29 +111,6 @@ namespace swxben.dataaccess
             return ExecuteQuery<T>(sql, where);
         }
 
-        public static string GetSelectSqlFor<T>(
-            object criteria = null,
-            string orderBy = null)
-        {
-            var where = new StringBuilder();
-            if (criteria != null)
-            {
-                where.Append(" WHERE 1=1 ");
-
-                foreach (var field in GetAllFieldNames(criteria.GetType()))
-                {
-                    where.AppendFormat(" AND {0} = @{0}", field);
-                }
-            }
-
-            orderBy = string.IsNullOrEmpty(orderBy) ? "" : string.Format("ORDER BY {0}", orderBy);
-
-            return string.Format(
-                "SELECT * FROM {0}s {1} {2}",
-                typeof(T).Name,
-                where,
-                orderBy);
-        }
 
         public void DropTable(string tableName)
         {
@@ -279,11 +137,20 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]')
             }
         }
 
-        [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-        public class IgnoreAttribute : Attribute
+        public static string GetInsertSqlFor<T>()
         {
-            public static bool Test(FieldInfo field) { return Attribute.IsDefined(field, typeof(IgnoreAttribute)); }
-            public static bool Test(PropertyInfo property) { return Attribute.IsDefined(property, typeof(IgnoreAttribute)); }
+            return DataAccessSqlGeneration.GetInsertSqlFor<T>();
+        }
+
+        public static string GetUpdateSqlFor<T>(string id)
+        {
+            return DataAccessSqlGeneration.GetUpdateSqlFor<T>(id);
+        }
+
+        public static string GetSelectSqlFor<T>(object criteria = null, string orderBy = null)
+        {
+            return DataAccessSqlGeneration.GetSelectSqlFor<T>(criteria, orderBy);
         }
     }
+
 }

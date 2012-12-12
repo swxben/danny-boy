@@ -8,8 +8,8 @@
     <ProjectGuid>{5B9AFF58-4D74-416E-A655-18FF95E52C6B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SWXBEN.dataaccess</RootNamespace>
-    <AssemblyName>SWXBEN.dataaccess</AssemblyName>
+    <RootNamespace>swxben.dataaccess</RootNamespace>
+    <AssemblyName>swxben.dataaccess</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -41,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess.cs" />
+    <Compile Include="DataAccessSqlGeneration.cs" />
+    <Compile Include="IDataAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
