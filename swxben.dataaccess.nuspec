@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>swxben.dataaccess</id>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <title>swxben.dataaccess</title>
     <authors>Ben Scott</authors>
     <owners>Ben Scott</owners>
@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Simple data access layer for SQL Server</description>
     <summary>Simple data access layer for SQL Server</summary>
-    <releaseNotes>Initial release</releaseNotes>
+    <releaseNotes>DataAccess.Ignore attribute to ignore fields and properties from auto-generated SQL</releaseNotes>
     <tags>sqlserver dataaccess dal</tags>
   </metadata>
   <files>
