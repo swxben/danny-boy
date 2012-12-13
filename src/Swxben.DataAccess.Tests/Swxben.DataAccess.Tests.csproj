@@ -60,6 +60,7 @@
     <Compile Include="get_insert_sql_is_sane.cs" />
     <Compile Include="get_select_sql_is_sane.cs" />
     <Compile Include="get_update_sql_is_sane.cs" />
+    <Compile Include="ignored_properties_still_get_assigned_when_query_includes_values_for_them.cs" />
     <Compile Include="nullable_datetime_works.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

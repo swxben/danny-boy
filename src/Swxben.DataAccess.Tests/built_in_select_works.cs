@@ -25,7 +25,8 @@ namespace Tests
             _dataAccess.DropTable("Customers");
         }
 
-        [Test]public void can_select_all_rows()
+        [Test]
+        public void can_select_all_rows()
         {
             _dataAccess.ExecuteCommand("CREATE TABLE Customers(CustomerId INT NOT NULL, CustomerName NVARCHAR(200) NOT NULL)");
             _dataAccess.Insert(new Customer { CustomerId = 1, CustomerName = "Test 1" });
@@ -65,7 +66,8 @@ namespace Tests
             _dataAccess.Insert(new Customer { CustomerId = 3, CustomerName = "Test 3" });
 
             var results = _dataAccess
-                .Select<Customer>(new { 
+                .Select<Customer>(new
+                {
                     CustomerId = 2,
                     CustomerName = "A customer",
                 }).ToList();
@@ -81,7 +83,8 @@ namespace Tests
             results[2].CustomerName.ShouldBe("A customer");
         }
 
-        [Test]public void order_by_works()
+        [Test]
+        public void order_by_works()
         {
             _dataAccess.ExecuteCommand("CREATE TABLE Customers(CustomerId INT NOT NULL, CustomerName NVARCHAR(200) NOT NULL)");
             _dataAccess.Insert(new Customer { CustomerId = 1, CustomerName = "aaa" });

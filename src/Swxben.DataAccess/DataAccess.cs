@@ -71,12 +71,10 @@ namespace swxben.dataaccess
                 var properties = typeof(T)
                     .GetProperties()
                     .Where(p => resultDictionary.ContainsKey(p.Name))
-                    .Where(p => p.CanWrite)
-                    .Where(p => !IgnoreAttribute.Test(p));
+                    .Where(p => p.CanWrite);
                 var fields = typeof(T)
                     .GetFields()
-                    .Where(f => resultDictionary.ContainsKey(f.Name))
-                    .Where(f => !IgnoreAttribute.Test(f));
+                    .Where(f => resultDictionary.ContainsKey(f.Name));
 
                 foreach (var property in properties)
                 {
