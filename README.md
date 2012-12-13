@@ -69,6 +69,29 @@ There are two versions of `ExecuteQuery()`, one returns strongly-typed DTOs, the
 		"DELETE FROM MyThings WHERE MyId = @MyId",
 		new { MyId = 17 });
 
+
+### Ignore fields and properties
+
+Decorate fields and properties with the `[DataAccess.Ignore]` attribute to indicate that they should be ignored by the `Insert` and `Update` commands.
+
+    class MyThing {
+    	public string Name{ get; set; }
+    	[DataAccess.Ignore]
+    	public int WidgetCount { get; set; }
+    }
+
+    dataAccess.Insert(new MyThing { Name = "Ben" });
+
+    INSERT INTO MyThings(Name) VALUES('Ben')
+
+Ignored fields and properties are still assigned when a value comes in from a query:
+
+    dataAccess.ExecuteQuery<MyThing>(
+    	"SELECT t.*, (SELECT COUNT(*) FROM Widgets w WHERE w.Owner = t.Name) AS WidgetCount FROM MyThings t");
+
+    /* MyThing.Name == "Ben", MyThing.WidgetCount == 12 */
+
+
 ### Other methods
 
 - `DropTable(string tableName)` drops the specified table if it exists. This is useful for automated tests.
@@ -80,6 +103,7 @@ There are two versions of `ExecuteQuery()`, one returns strongly-typed DTOs, the
 
 If you want to contribute to this project, start by forking the repo: <https://github.com/swxben/swxben.dataaccess>. Create an issue if applicable, create a branch in your fork, and create a pull request when it's ready. Thanks!
 
+### Contributors
 
 ## Building, running tests and the NuGet package
 
@@ -95,6 +119,5 @@ All files [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) unless 
 Third party libraries or resources have been included in this project under their respective licenses.
 
 
-## Contributors
 
 
