@@ -92,6 +92,21 @@ Ignored fields and properties are still assigned when a value comes in from a qu
     /* MyThing.Name == "Ben", MyThing.WidgetCount == 12 */
 
 
+### DTOs without a parameterless constructor
+
+Most simple DTOs will just have a default parameter, however there are some cases where a DTO 
+will require a more complex constructor. `ExecuteQuery<T>()` and `Select<T>()` have overloads
+that accept a factory method - an object of type `Func<T>`:
+
+    var service = Get.Some<Service>();
+
+    var things = dataAccess.Select<MyThing>(() => new MyThing(service));
+    var someThings = dataAccess.ExecuteQuery<MyThing>(
+        () => new MyThing(service),
+        "SELECT TOP 5 * FROM MyThings"
+    );
+
+
 ### Other methods
 
 - `DropTable(string tableName)` drops the specified table if it exists. This is useful for automated tests.
