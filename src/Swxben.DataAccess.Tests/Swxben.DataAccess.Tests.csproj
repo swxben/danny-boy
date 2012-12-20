@@ -53,6 +53,7 @@
     <Compile Include="built_in_update_works.cs" />
     <Compile Include="can_ignore_properties_in_autogen_insert_and_update.cs" />
     <Compile Include="can_insert_null_into_a_column.cs" />
+    <Compile Include="can_query_into_a_type_without_a_parameterless_constructor.cs" />
     <Compile Include="can_read_and_write_enums_as_a_string_field.cs" />
     <Compile Include="can_read_and_write_nullable_enums_as_string.cs" />
     <Compile Include="can_select_in_to_a_class_with_read_only_properties.cs" />

@@ -68,25 +68,43 @@ namespace swxben.dataaccess
                 var resultDictionary = result as IDictionary<string, object>;
                 var t = new T();
 
-                var properties = typeof(T)
-                    .GetProperties()
-                    .Where(p => resultDictionary.ContainsKey(p.Name))
-                    .Where(p => p.CanWrite);
-                var fields = typeof(T)
-                    .GetFields()
-                    .Where(f => resultDictionary.ContainsKey(f.Name));
-
-                foreach (var property in properties)
-                {
-                    property.SetValue(t, DataAccessSqlGeneration.GetValue(resultDictionary[property.Name], property.PropertyType), null);
-                }
-                foreach (var field in fields)
-                {
-                    field.SetValue(t, DataAccessSqlGeneration.GetValue(resultDictionary[field.Name], field.FieldType));
-                }
+                ReadResultIntoObject<T>(resultDictionary, t);
 
                 return t;
             });
+        }
+
+        public IEnumerable<T> ExecuteQuery<T>(Func<T> factory, string sql, object parameters = null)
+        {
+            return ExecuteQuery(sql, parameters).Select(result =>
+            {
+                var resultDictionary = result as IDictionary<string, object>;
+                var t = factory();
+
+                ReadResultIntoObject<T>(resultDictionary, t);
+
+                return t;
+            });
+        }
+
+        private static void ReadResultIntoObject<T>(IDictionary<string, object> resultDictionary, T t)
+        {
+            var properties = typeof(T)
+                .GetProperties()
+                .Where(p => resultDictionary.ContainsKey(p.Name))
+                .Where(p => p.CanWrite);
+            var fields = typeof(T)
+                .GetFields()
+                .Where(f => resultDictionary.ContainsKey(f.Name));
+
+            foreach (var property in properties)
+            {
+                property.SetValue(t, DataAccessSqlGeneration.GetValue(resultDictionary[property.Name], property.PropertyType), null);
+            }
+            foreach (var field in fields)
+            {
+                field.SetValue(t, DataAccessSqlGeneration.GetValue(resultDictionary[field.Name], field.FieldType));
+            }
         }
 
         public void Insert<T>(T value)
@@ -99,16 +117,21 @@ namespace swxben.dataaccess
             ExecuteCommand(GetUpdateSqlFor<T>(id), value);
         }
 
-
         public IEnumerable<T> Select<T>(
             object where = null,
             string orderBy = null
             ) where T : new()
         {
-            var sql = GetSelectSqlFor<T>(where, orderBy);
-            return ExecuteQuery<T>(sql, where);
+            return ExecuteQuery<T>(GetSelectSqlFor<T>(where, orderBy), where);
         }
 
+        public IEnumerable<T> Select<T>(
+            Func<T> factory,
+            object where = null,
+            string orderBy = null)
+        {
+            return ExecuteQuery(factory, GetSelectSqlFor<T>(where, orderBy), where);
+        }
 
         public void DropTable(string tableName)
         {

@@ -8,13 +8,12 @@ namespace swxben.dataaccess
         int ExecuteCommand(string sql, object parameters = null);
         IEnumerable<dynamic> ExecuteQuery(string sql, object parameters = null);
         IEnumerable<T> ExecuteQuery<T>(string sql, object parameters = null) where T : new();
+        IEnumerable<T> ExecuteQuery<T>(Func<T> factory, string sql, object parameters = null);
         void Insert<T>(T value);
         void Update<T>(T value, string id);
         void DropTable(string tableName);
-        IEnumerable<T> Select<T>(
-            object where = null,
-            string orderBy = null
-            ) where T : new();
+        IEnumerable<T> Select<T>(object where = null, string orderBy = null) where T : new();
+        IEnumerable<T> Select<T>(Func<T> factory, object where = null, string orderBy = null);
         Exception TestConnection();
     }
 }
