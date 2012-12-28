@@ -90,22 +90,37 @@ namespace swxben.dataaccess
                 valuesSql);
         }
 
-        public static string GetUpdateSqlFor<T>(string id)
+        public static string GetUpdateSqlFor<T>(params string[] identifiers)
         {
             var set = new StringBuilder();
 
             foreach (var field in GetAllFieldNames<T>())
             {
-                if (field.ToUpper() == id.ToUpper()) continue;
+                if (identifiers.Any(id => string.Equals(id, field, StringComparison.InvariantCultureIgnoreCase))) continue;
                 if (!string.IsNullOrEmpty(set.ToString())) set.Append(", ");
                 set.AppendFormat("{0} = @{0}", field);
             }
 
+            var identifiersCondition = new StringBuilder();
+            foreach (var id in identifiers) identifiersCondition.AppendFormat(" AND {0} = @{0}", id);
+
             return string.Format(
-                "UPDATE {0}s SET {1} WHERE {2} = @{2}",
+                "UPDATE {0}s SET {1} WHERE 1=1 {2}",
                 typeof(T).Name,
                 set,
-                id);
+                identifiersCondition);
+        }
+
+        public static string GetUpdateSqlFor<T>()
+        {
+            return GetUpdateSqlFor<T>(GetIdentifiers<T>().ToArray());
+        }
+
+        static IEnumerable<string> GetIdentifiers<T>()
+        {
+            var fields = typeof(T).GetFields().Where(f => DataAccess.IdentifierAttribute.Test(f)).Select(f => f.Name);
+            var properties = typeof(T).GetProperties().Where(p => DataAccess.IdentifierAttribute.Test(p)).Select(p => p.Name);
+            return fields.Concat(properties);
         }
 
         public static IEnumerable<string> GetAllFieldNames<T>()
@@ -119,6 +134,7 @@ namespace swxben.dataaccess
             var propertyNames = t.GetProperties().Where(p => !DataAccess.IgnoreAttribute.Test(p)).Select(p => p.Name);
             return fieldNames.Concat(propertyNames);
         }
+
         public static string GetSelectSqlFor<T>(object criteria = null, string orderBy = null)
         {
             var where = new StringBuilder();

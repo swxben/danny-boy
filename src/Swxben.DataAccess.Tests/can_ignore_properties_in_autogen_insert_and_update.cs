@@ -36,7 +36,7 @@ namespace Tests
         public void update_sql_ignores_property()
         {
             var sql = DataAccess.GetUpdateSqlFor<Example>("ExampleGuid");
-            sql.ShouldBeCloseTo("UPDATE Examples SET Name = @Name WHERE ExampleGuid = @ExampleGuid");
+            sql.ShouldBeCloseTo("UPDATE Examples SET Name = @Name WHERE 1=1 AND ExampleGuid = @ExampleGuid");
         }
     }
 }

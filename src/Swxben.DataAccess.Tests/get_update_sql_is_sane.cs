@@ -21,7 +21,7 @@ namespace Tests
             var sql = DataAccess.GetUpdateSqlFor<ExampleOne>("ExampleOneIdentifier");
 
             sql.ShouldBeCloseTo(
-"UPDATE ExampleOnes SET ExampleOneIntValue = @ExampleOneIntValue, ExampleOneStringProperty = @ExampleOneStringProperty WHERE ExampleOneIdentifier = @ExampleOneIdentifier");
+"UPDATE ExampleOnes SET ExampleOneIntValue = @ExampleOneIntValue, ExampleOneStringProperty = @ExampleOneStringProperty WHERE 1=1 AND ExampleOneIdentifier = @ExampleOneIdentifier");
         }
     }
 }

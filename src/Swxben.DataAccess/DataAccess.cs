@@ -16,6 +16,13 @@ namespace swxben.dataaccess
             public static bool Test(PropertyInfo property) { return Attribute.IsDefined(property, typeof(IgnoreAttribute)); }
         }
 
+        [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+        public class IdentifierAttribute : Attribute
+        {
+            public static bool Test(FieldInfo field) { return Attribute.IsDefined(field, typeof(IdentifierAttribute)); }
+            public static bool Test(PropertyInfo property) { return Attribute.IsDefined(property, typeof(IdentifierAttribute)); }
+        }
+
         string _connectionString = "";
 
         public DataAccess(string connectionString)
@@ -112,9 +119,9 @@ namespace swxben.dataaccess
             ExecuteCommand(GetInsertSqlFor<T>(), value);
         }
 
-        public void Update<T>(T value, string id)
+        public void Update<T>(T value, params string[] identifiers)
         {
-            ExecuteCommand(GetUpdateSqlFor<T>(id), value);
+            ExecuteCommand(GetUpdateSqlFor<T>(identifiers), value);
         }
 
         public IEnumerable<T> Select<T>(
@@ -163,9 +170,14 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]')
             return DataAccessSqlGeneration.GetInsertSqlFor<T>();
         }
 
-        public static string GetUpdateSqlFor<T>(string id)
+        public static string GetUpdateSqlFor<T>(params string[] identifiers)
         {
-            return DataAccessSqlGeneration.GetUpdateSqlFor<T>(id);
+            return DataAccessSqlGeneration.GetUpdateSqlFor<T>(identifiers);
+        }
+
+        public static string GetUpdateSqlFor<T>()
+        {
+            return DataAccessSqlGeneration.GetUpdateSqlFor<T>();
         }
 
         public static string GetSelectSqlFor<T>(object criteria = null, string orderBy = null)

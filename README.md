@@ -37,6 +37,29 @@ Update needs the field name for the identifier, rather than using a strict conve
 
     UPDATE MyThings SET MyName = 'Ben' WHERE MyId = 13
 
+Compound keys can be specified:
+
+    dataAccess.Update(
+        new MyThing { ForeignKey1 = 5, ForeignKey2 = 8, AtDate = DateTime.Now }, 
+        "ForeignKey1",
+        "ForeignKey2");
+
+        UPDATE MyThings SET AtDate = '...' WHERE ForeignKey1 = 5 AND ForeignKey2 = 8
+
+Alternatively, identifier fields can be decorated:
+
+    class MyThing {
+        [DataAccess.Identifier]
+        public int MyId;
+        public string MyName;
+    }
+
+    dataAccess.Update(new MyThing { MyId = 4, MyName = "Ben" });
+
+    UPDATE MyThings SET MyName = 'Ben' WHERE MyId = 4
+
+Multiple fields can be decorated with the `DataAccess.Identifier` attribute for compound keys.
+
 
 ### Select
 

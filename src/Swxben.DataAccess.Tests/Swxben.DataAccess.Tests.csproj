@@ -51,6 +51,7 @@
     <Compile Include="built_in_insert_works.cs" />
     <Compile Include="built_in_select_works.cs" />
     <Compile Include="built_in_update_works.cs" />
+    <Compile Include="can_decorate_identifier_column_for_update_operations.cs" />
     <Compile Include="can_ignore_properties_in_autogen_insert_and_update.cs" />
     <Compile Include="can_insert_null_into_a_column.cs" />
     <Compile Include="can_query_into_a_type_without_a_parameterless_constructor.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="can_read_and_write_nullable_enums_as_string.cs" />
     <Compile Include="can_select_in_to_a_class_with_read_only_properties.cs" />
     <Compile Include="can_use_a_simple_table.cs" />
+    <Compile Include="can_use_compound_identifiers.cs" />
     <Compile Include="get_insert_sql_is_sane.cs" />
     <Compile Include="get_select_sql_is_sane.cs" />
     <Compile Include="get_update_sql_is_sane.cs" />
