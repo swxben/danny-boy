@@ -58,7 +58,7 @@ Alternatively, identifier fields can be decorated:
 
     UPDATE MyThings SET MyName = 'Ben' WHERE MyId = 4
 
-Multiple fields can be decorated with the `DataAccess.Identifier` attribute for compound keys.
+Multiple fields can be decorated with the `DataAccess.Identifier` attribute for compound keys. Specifying the identifier columns using the first overload above will override the decorated fields.
 
 
 ### Select
