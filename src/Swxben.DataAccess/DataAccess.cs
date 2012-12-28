@@ -172,7 +172,8 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]')
 
         public static string GetUpdateSqlFor<T>(params string[] identifiers)
         {
-            return DataAccessSqlGeneration.GetUpdateSqlFor<T>(identifiers);
+            if (identifiers.Any()) return DataAccessSqlGeneration.GetUpdateSqlFor<T>(identifiers);
+            return DataAccessSqlGeneration.GetUpdateSqlFor<T>();
         }
 
         public static string GetUpdateSqlFor<T>()

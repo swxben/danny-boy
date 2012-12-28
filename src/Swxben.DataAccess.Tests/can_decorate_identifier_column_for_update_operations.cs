@@ -40,5 +40,35 @@ namespace Tests
                 .GetUpdateSqlFor<CompoundIdentifierExample>()
                 .ShouldBeCloseTo("UPDATE CompoundIdentifierExamples SET Name = @Name WHERE 1=1 AND IdentifierPartOneGuid = @IdentifierPartOneGuid AND IdentifierPartTwoGuid = @IdentifierPartTwoGuid AND IdentifierPartThree = @IdentifierPartThree");
         }
+
+        class DtoWithIdentifiersAndIgnores
+        {
+            [DataAccess.Identifier]
+            public Guid DtoGuidPartOne { get; set; }
+            [DataAccess.Identifier]
+            public Guid DtoGuidPartTwo { get; set; }
+            public string Name;
+            public int Age;
+            [DataAccess.Ignore]
+            public string IgnoreOne;
+            [DataAccess.Ignore]
+            public string IgnoreTwo;
+        }
+
+        [Test]
+        public void sql_is_correct_for_identifiers_and_ignores()
+        {
+            DataAccess
+                .GetUpdateSqlFor<DtoWithIdentifiersAndIgnores>()
+                .ShouldBeCloseTo("UPDATE DtoWithIdentifiersAndIgnoress SET Name = @Name, Age = @Age WHERE 1=1 AND DtoGuidPartOne = @DtoGuidPartOne AND DtoGuidPartTwo = @DtoGuidPartTwo");
+        }
+
+        [Test]
+        public void passing_empty_set_of_identifiers_uses_decorated_identifiers()
+        {
+            DataAccess
+                .GetUpdateSqlFor<DtoWithIdentifiersAndIgnores>(new string[0])
+                .ShouldBeCloseTo("UPDATE DtoWithIdentifiersAndIgnoress SET Name = @Name, Age = @Age WHERE 1=1 AND DtoGuidPartOne = @DtoGuidPartOne AND DtoGuidPartTwo = @DtoGuidPartTwo");
+        }
     }
 }
