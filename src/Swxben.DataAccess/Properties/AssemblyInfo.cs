@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("swxben.dataaccess")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Simple data access layer for SQL Server")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Software by Ben Pty Ltd")]
 [assembly: AssemblyProduct("swxben.dataaccess")]
