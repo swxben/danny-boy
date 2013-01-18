@@ -5,7 +5,6 @@ using System.Text;
 using NUnit.Framework;
 using swxben.dataaccess;
 using Shouldly;
-using System.Linq;
 
 namespace Tests
 {

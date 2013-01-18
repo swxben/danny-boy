@@ -17,5 +17,6 @@ namespace swxben.dataaccess
         IEnumerable<T> Select<T>(Func<T> factory, object where = null, string orderBy = null);
         IEnumerable<T> Select<T>(Func<dynamic, T> transform, object where = null, string orderBy = null);
         Exception TestConnection();
+        bool Any<T>(object where = null);
     }
 }

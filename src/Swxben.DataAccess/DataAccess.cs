@@ -189,14 +189,18 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]')
             return DataAccessSqlGeneration.GetUpdateSqlFor<T>();
         }
 
-        public static string GetUpdateSqlFor<T>()
-        {
-            return DataAccessSqlGeneration.GetUpdateSqlFor<T>();
-        }
-
         public static string GetSelectSqlFor<T>(object criteria = null, string orderBy = null)
         {
             return DataAccessSqlGeneration.GetSelectSqlFor<T>(criteria, orderBy);
+        }
+
+        public bool Any<T>(object criteria = null)
+        {
+            var sql = string.Format(
+                "SELECT 1 FROM {0} {1}", 
+                DataAccessSqlGeneration.GetTableName<T>(), 
+                DataAccessSqlGeneration.GetWhereForCriteria(criteria));
+            return ExecuteQuery(sql, criteria).Any();
         }
     }
 }

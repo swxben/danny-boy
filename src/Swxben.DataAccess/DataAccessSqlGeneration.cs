@@ -84,8 +84,8 @@ namespace swxben.dataaccess
             }
 
             return string.Format(
-                "INSERT INTO {0}s({1}) VALUES({2})",
-                typeof(T).Name,
+                "INSERT INTO {0}({1}) VALUES({2})",
+                GetTableName<T>(),
                 fieldsSql,
                 valuesSql);
         }
@@ -105,8 +105,8 @@ namespace swxben.dataaccess
             foreach (var id in identifiers) identifiersCondition.AppendFormat(" AND {0} = @{0}", id);
 
             return string.Format(
-                "UPDATE {0}s SET {1} WHERE 1=1 {2}",
-                typeof(T).Name,
+                "UPDATE {0} SET {1} WHERE 1=1 {2}",
+                GetTableName<T>(),
                 set,
                 identifiersCondition);
         }
@@ -137,24 +137,34 @@ namespace swxben.dataaccess
 
         public static string GetSelectSqlFor<T>(object criteria = null, string orderBy = null)
         {
-            var where = new StringBuilder();
+            var wherePart = GetWhereForCriteria(criteria);
+            var orderByPart = string.IsNullOrEmpty(orderBy) ? "" : string.Format("ORDER BY {0}", orderBy);
+
+            return string.Format(
+                "SELECT * FROM {0} {1} {2}",
+                GetTableName<T>(),
+                wherePart,
+                orderByPart);
+        }
+
+        public static string GetTableName<T>()
+        {
+            return typeof (T).Name + "s";
+        }
+
+        public static string GetWhereForCriteria(object criteria)
+        {
+            var wherePart = new StringBuilder();
             if (criteria != null)
             {
-                where.Append(" WHERE 1=1 ");
+                wherePart.Append(" WHERE 1=1 ");
 
                 foreach (var field in GetAllFieldNames(criteria.GetType()))
                 {
-                    where.AppendFormat(" AND {0} = @{0}", field);
+                    wherePart.AppendFormat(" AND {0} = @{0}", field);
                 }
             }
-
-            orderBy = string.IsNullOrEmpty(orderBy) ? "" : string.Format("ORDER BY {0}", orderBy);
-
-            return string.Format(
-                "SELECT * FROM {0}s {1} {2}",
-                typeof(T).Name,
-                where,
-                orderBy);
+            return wherePart.ToString();
         }
     }
 }

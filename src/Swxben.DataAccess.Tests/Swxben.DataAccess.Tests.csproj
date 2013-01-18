@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="any_method_for_checking_existence_of_data.cs" />
     <Compile Include="built_in_insert_works.cs" />
     <Compile Include="built_in_select_works.cs" />
     <Compile Include="built_in_update_works.cs" />
