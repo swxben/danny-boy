@@ -66,6 +66,8 @@
     <Compile Include="ignored_properties_still_get_assigned_when_query_includes_values_for_them.cs" />
     <Compile Include="nullable_datetime_works.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="select_with_transform_function.cs" />
+    <Compile Include="TestConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

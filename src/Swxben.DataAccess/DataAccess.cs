@@ -94,6 +94,11 @@ namespace swxben.dataaccess
             });
         }
 
+        public IEnumerable<T> ExecuteQuery<T>(Func<dynamic, T> transform, string sql, object parameters = null)
+        {
+            return ExecuteQuery(sql, parameters).Select(transform);
+        }
+
         private static void ReadResultIntoObject<T>(IDictionary<string, object> resultDictionary, T t)
         {
             var properties = typeof(T)
@@ -138,6 +143,14 @@ namespace swxben.dataaccess
             string orderBy = null)
         {
             return ExecuteQuery(factory, GetSelectSqlFor<T>(where, orderBy), where);
+        }
+
+        public IEnumerable<T> Select<T>(
+            Func<dynamic, T> transform,
+            object where = null,
+            string orderBy = null)
+        {
+            return ExecuteQuery(transform, GetSelectSqlFor<T>(where, orderBy), where);
         }
 
         public void DropTable(string tableName)
@@ -186,5 +199,4 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]')
             return DataAccessSqlGeneration.GetSelectSqlFor<T>(criteria, orderBy);
         }
     }
-
 }

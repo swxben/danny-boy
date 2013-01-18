@@ -11,7 +11,7 @@ namespace Tests
     [TestFixture]
     public class can_insert_null_into_a_column
     {
-        IDataAccess _dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; User Id=sa; Password=test;");
+        IDataAccess _dataAccess = new DataAccess(TestConfiguration.CONNECTION_STRING);
 
 
         [SetUp, TearDown]

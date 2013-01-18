@@ -117,7 +117,7 @@ Ignored fields and properties are still assigned when a value comes in from a qu
 
 ### DTOs without a parameterless constructor
 
-Most simple DTOs will just have a default parameter, however there are some cases where a DTO 
+Most simple DTOs will just have a default constructor, however there are some cases where a DTO 
 will require a more complex constructor. `ExecuteQuery<T>()` and `Select<T>()` have overloads
 that accept a factory method - an object of type `Func<T>`:
 
@@ -128,6 +128,31 @@ that accept a factory method - an object of type `Func<T>`:
         () => new MyThing(service),
         "SELECT TOP 5 * FROM MyThings"
     );
+
+
+### DTOs with a complex graph
+
+This could also be used in place of the factory method above for DTOs with a non-parameterless constructor. `ExecuteQuery<T>()` and `Select<T>()` have overloads that accept a tranform method, a `Func<dynamic, T>` that converts the dynamic row into a T:
+
+    class Address { 
+        public string Line1; 
+        public string Line2; 
+    }
+    class Customer { 
+        public string Name; 
+        public Address BillingAddress; 
+        public Address ShippingAddress; 
+    }
+
+    var customers = dataAccess.Select<Customer>(transform: r => new Customer { 
+            Name = (string)r.Name,
+            BillingAddress = new Address { Line1 = (string)r.BillingAddressLine1, Line2 = (string)r.BillingAddressLine2 },
+            ShippingAddress = new Address { Line1 = (string)r.ShippingAddressLine1, Line2 = (string)r.ShippingAddressLine2 }
+        });
+        
+    // or:
+    Customer GetCustomer(dynamic row) { return ... }
+    var customers = dataAccess.Select(GetCustomer);
 
 
 ### Other methods
