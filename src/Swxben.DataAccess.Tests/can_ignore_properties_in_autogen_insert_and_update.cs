@@ -28,14 +28,14 @@ namespace Tests
         [Test]
         public void insert_sql_ignores_property()
         {
-            var sql = DataAccessSqlGeneration.GetInsertSqlFor<Example>();
+            var sql = DataAccess.GetInsertSqlFor<Example>();
             sql.ShouldBeCloseTo("INSERT INTO Examples(ExampleGuid, Name) VALUES(@ExampleGuid, @Name)");
         }
 
         [Test]
         public void update_sql_ignores_property()
         {
-            var sql = DataAccessSqlGeneration.GetUpdateSqlFor(typeof(Example), new[]{"ExampleGuid"});
+            var sql = DataAccess.GetUpdateSqlFor(typeof(Example), new[] { "ExampleGuid" });
             sql.ShouldBeCloseTo("UPDATE Examples SET Name = @Name WHERE 1=1 AND ExampleGuid = @ExampleGuid");
         }
     }

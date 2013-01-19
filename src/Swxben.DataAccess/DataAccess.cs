@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace swxben.dataaccess
 {
-    public class DataAccess : IDataAccess
+    public partial class DataAccess : IDataAccess
     {
         [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
         public class IgnoreAttribute : Attribute
@@ -34,7 +34,7 @@ namespace swxben.dataaccess
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                var command = DataAccessSqlGeneration.GetCommand(sql, connection, parameters);
+                var command = GetCommand(sql, connection, parameters);
 
                 connection.Open();
 
@@ -46,7 +46,7 @@ namespace swxben.dataaccess
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                var command = DataAccessSqlGeneration.GetCommand(sql, connection, parameters);
+                var command = GetCommand(sql, connection, parameters);
 
                 connection.Open();
 
@@ -99,35 +99,15 @@ namespace swxben.dataaccess
             return ExecuteQuery(sql, parameters).Select(transform);
         }
 
-        private static void ReadResultIntoObject<T>(IDictionary<string, object> resultDictionary, T t)
-        {
-            var properties = typeof(T)
-                .GetProperties()
-                .Where(p => resultDictionary.ContainsKey(p.Name))
-                .Where(p => p.CanWrite);
-            var fields = typeof(T)
-                .GetFields()
-                .Where(f => resultDictionary.ContainsKey(f.Name));
-
-            foreach (var property in properties)
-            {
-                property.SetValue(t, DataAccessSqlGeneration.GetValue(resultDictionary[property.Name], property.PropertyType), null);
-            }
-            foreach (var field in fields)
-            {
-                field.SetValue(t, DataAccessSqlGeneration.GetValue(resultDictionary[field.Name], field.FieldType));
-            }
-        }
-
         public void Insert<T>(T value, string tableName = null)
         {
-            var sql = DataAccessSqlGeneration.GetInsertSqlFor<T>(tableName);
+            var sql = GetInsertSqlFor<T>(tableName);
             ExecuteCommand(sql, value);
         }
 
         public void Update<T>(T value, string[] identifiers = null, string tableName = null)
         {
-            var sql = DataAccessSqlGeneration.GetUpdateSqlFor(typeof(T), identifiers, tableName);
+            var sql = GetUpdateSqlFor(typeof(T), identifiers, tableName);
             ExecuteCommand(sql, value);
         }
 
@@ -137,7 +117,7 @@ namespace swxben.dataaccess
             string orderBy = null
             ) where T : new()
         {
-            var sql = DataAccessSqlGeneration.GetSelectSqlFor(typeof(T), where, orderBy, tableName);
+            var sql = GetSelectSqlFor(typeof(T), where, orderBy, tableName);
             return ExecuteQuery<T>(sql, where);
         }
 
@@ -149,7 +129,7 @@ namespace swxben.dataaccess
             )
         {
 
-            var sql = DataAccessSqlGeneration.GetSelectSqlFor(typeof(T), where, orderBy, tableName);
+            var sql = GetSelectSqlFor(typeof(T), where, orderBy, tableName);
             return ExecuteQuery(factory, sql, where);
         }
 
@@ -160,7 +140,7 @@ namespace swxben.dataaccess
             string orderBy = null
             )
         {
-            var sql = DataAccessSqlGeneration.GetSelectSqlFor(typeof(T), where, orderBy, tableName);
+            var sql = GetSelectSqlFor(typeof(T), where, orderBy, tableName);
             return ExecuteQuery(transform, sql, where);
         }
 
@@ -170,7 +150,7 @@ namespace swxben.dataaccess
             string orderBy = null
             )
         {
-            var sql = DataAccessSqlGeneration.GetSelectSqlFor(null, where, orderBy, tableName);
+            var sql = GetSelectSqlFor(null, where, orderBy, tableName);
             return ExecuteQuery(sql, where);
         }
 
@@ -180,7 +160,7 @@ namespace swxben.dataaccess
             object where = null,
             string orderBy = null)
         {
-            var sql = DataAccessSqlGeneration.GetSelectSqlFor(null, where, orderBy, tableName);
+            var sql = GetSelectSqlFor(null, where, orderBy, tableName);
             return ExecuteQuery(transform, sql, where);
         }
 
@@ -216,7 +196,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]')
 
         public bool Any(Type t, object where = null)
         {
-            return Any(DataAccessSqlGeneration.GetTableName(t), where);
+            return Any(GetTableName(t), where);
         }
 
         public bool Any(string tableName, object where = null)
@@ -224,7 +204,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]')
             var sql = string.Format(
                 "SELECT 1 FROM {0} {1}",
                 tableName,
-                DataAccessSqlGeneration.GetWhereForCriteria(where));
+                GetWhereForCriteria(where));
             return ExecuteQuery(sql, where).Any();
         }
     }

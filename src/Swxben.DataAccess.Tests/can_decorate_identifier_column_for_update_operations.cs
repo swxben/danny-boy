@@ -18,7 +18,7 @@ namespace Tests
         [Test]
         public void update_sql_uses_identifier_property()
         {
-            var sql = DataAccessSqlGeneration.GetUpdateSqlFor(typeof(Example));
+            var sql = DataAccess.GetUpdateSqlFor(typeof(Example));
             sql.ShouldBeCloseTo("UPDATE Examples SET Name = @Name WHERE 1=1 AND ExampleGuid = @ExampleGuid");
         }
 
@@ -36,7 +36,7 @@ namespace Tests
         [Test]
         public void condition_is_correct_for_compound_identifiers()
         {
-            DataAccessSqlGeneration
+            DataAccess
                 .GetUpdateSqlFor(typeof(CompoundIdentifierExample))
                 .ShouldBeCloseTo("UPDATE CompoundIdentifierExamples SET Name = @Name WHERE 1=1 AND IdentifierPartOneGuid = @IdentifierPartOneGuid AND IdentifierPartTwoGuid = @IdentifierPartTwoGuid AND IdentifierPartThree = @IdentifierPartThree");
         }
@@ -58,7 +58,7 @@ namespace Tests
         [Test]
         public void sql_is_correct_for_identifiers_and_ignores()
         {
-            DataAccessSqlGeneration
+            DataAccess
                 .GetUpdateSqlFor(typeof(DtoWithIdentifiersAndIgnores))
                 .ShouldBeCloseTo("UPDATE DtoWithIdentifiersAndIgnoress SET Name = @Name, Age = @Age WHERE 1=1 AND DtoGuidPartOne = @DtoGuidPartOne AND DtoGuidPartTwo = @DtoGuidPartTwo");
         }

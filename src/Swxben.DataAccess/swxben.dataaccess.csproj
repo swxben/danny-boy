@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess.cs" />
-    <Compile Include="DataAccessSqlGeneration.cs" />
+    <Compile Include="DataAccess`static.cs" />
     <Compile Include="IDataAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

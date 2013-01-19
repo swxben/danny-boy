@@ -6,8 +6,28 @@ using System.Text;
 
 namespace swxben.dataaccess
 {
-    public class DataAccessSqlGeneration
+    partial class DataAccess
     {
+        private static void ReadResultIntoObject<T>(IDictionary<string, object> resultDictionary, T t)
+        {
+            var properties = typeof(T)
+                .GetProperties()
+                .Where(p => resultDictionary.ContainsKey(p.Name))
+                .Where(p => p.CanWrite);
+            var fields = typeof(T)
+                .GetFields()
+                .Where(f => resultDictionary.ContainsKey(f.Name));
+
+            foreach (var property in properties)
+            {
+                property.SetValue(t, GetValue(resultDictionary[property.Name], property.PropertyType), null);
+            }
+            foreach (var field in fields)
+            {
+                field.SetValue(t, GetValue(resultDictionary[field.Name], field.FieldType));
+            }
+        }
+
         public static object GetValue(object value, Type type)
         {
             if (value == null) return null;
@@ -71,7 +91,7 @@ namespace swxben.dataaccess
 
         public static string GetInsertSqlFor<T>(string tableName = null)
         {
-            return GetInsertSqlFor(typeof (T), tableName);
+            return GetInsertSqlFor(typeof(T), tableName);
         }
 
         public static string GetInsertSqlFor(Type t, string tableName = null)
@@ -121,13 +141,13 @@ namespace swxben.dataaccess
 
         static IEnumerable<string> GetIdentifiers<T>()
         {
-            return GetIdentifiers(typeof (T));
+            return GetIdentifiers(typeof(T));
         }
 
         static IEnumerable<string> GetIdentifiers(Type t)
         {
-            var fields = t.GetFields().Where(f => DataAccess.IdentifierAttribute.Test(f)).Select(f => f.Name);
-            var properties = t.GetProperties().Where(p => DataAccess.IdentifierAttribute.Test(p)).Select(p => p.Name);
+            var fields = t.GetFields().Where(IdentifierAttribute.Test).Select(f => f.Name);
+            var properties = t.GetProperties().Where(IdentifierAttribute.Test).Select(p => p.Name);
             return fields.Concat(properties);
         }
 
@@ -170,5 +190,6 @@ namespace swxben.dataaccess
             }
             return wherePart.ToString();
         }
+
     }
 }

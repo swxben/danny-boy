@@ -25,7 +25,7 @@ namespace Tests
         public void insert_sql_is_sane()
         {
             var thing = new { ColA = "aaa", ColB = "bbb" };
-            var sql = DataAccessSqlGeneration.GetInsertSqlFor(thing.GetType(), "Things");
+            var sql = DataAccess.GetInsertSqlFor(thing.GetType(), "Things");
             sql.ShouldBeCloseTo("INSERT INTO Things(ColA, ColB) VALUES(@ColA, @ColB)");
         }
 
@@ -41,7 +41,7 @@ namespace Tests
         public void update_sql_is_sane()
         {
             var thing = new { ColA = "aaa", ColB = "bbb", Id = 1 };
-            var sql = DataAccessSqlGeneration.GetUpdateSqlFor(thing.GetType(), new[] { "Id" }, "Things");
+            var sql = DataAccess.GetUpdateSqlFor(thing.GetType(), new[] { "Id" }, "Things");
             sql.ShouldBeCloseTo("UPDATE Things SET ColA = @ColA, ColB = @ColB WHERE 1=1 AND Id = @Id");
         }
 
@@ -62,7 +62,7 @@ namespace Tests
         [Test]
         public void select_sql_is_sane()
         {
-            var sql = DataAccessSqlGeneration.GetSelectSqlFor(null, null, null, "Things");
+            var sql = DataAccess.GetSelectSqlFor(null, null, null, "Things");
             sql.ShouldBeCloseTo("SELECT * FROM Things");
         }
 

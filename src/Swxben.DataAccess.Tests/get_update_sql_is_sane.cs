@@ -18,7 +18,7 @@ namespace Tests
         [Test]
         public void update_sql_is_correct_for_example_one()
         {
-            var sql = DataAccessSqlGeneration.GetUpdateSqlFor(typeof(ExampleOne), new[]{"ExampleOneIdentifier"});
+            var sql = DataAccess.GetUpdateSqlFor(typeof(ExampleOne), new[] { "ExampleOneIdentifier" });
 
             sql.ShouldBeCloseTo(
 "UPDATE ExampleOnes SET ExampleOneIntValue = @ExampleOneIntValue, ExampleOneStringProperty = @ExampleOneStringProperty WHERE 1=1 AND ExampleOneIdentifier = @ExampleOneIdentifier");
