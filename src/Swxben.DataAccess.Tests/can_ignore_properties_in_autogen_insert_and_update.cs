@@ -28,7 +28,7 @@ namespace Tests
         [Test]
         public void insert_sql_ignores_property()
         {
-            var sql = DataAccess.GetInsertSqlFor<Example>();
+            var sql = DataAccess.GetInsertSqlFor(typeof(Example));
             sql.ShouldBeCloseTo("INSERT INTO Examples(ExampleGuid, Name) VALUES(@ExampleGuid, @Name)");
         }
 

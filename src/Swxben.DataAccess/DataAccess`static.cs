@@ -28,7 +28,7 @@ namespace swxben.dataaccess
             }
         }
 
-        public static object GetValue(object value, Type type)
+        static object GetValue(object value, Type type)
         {
             if (value == null) return null;
             if (!(value is string)) return value;
@@ -42,20 +42,21 @@ namespace swxben.dataaccess
             return value;
         }
 
-        public static SqlCommand GetCommand(string sql, SqlConnection connection, object parameters)
+        static SqlCommand GetCommand(string sql, SqlConnection connection, object parameters)
         {
-            var command = new SqlCommand();
-
-            command.CommandType = System.Data.CommandType.Text;
-            command.Connection = connection;
-            command.CommandText = sql;
+            var command = new SqlCommand
+                {
+                    CommandType = System.Data.CommandType.Text, 
+                    Connection = connection, 
+                    CommandText = sql
+                };
 
             if (parameters != null)
             {
                 var properties = parameters.GetType().GetProperties()
-                    .Where(p => !DataAccess.IgnoreAttribute.Test(p));
+                    .Where(p => !IgnoreAttribute.Test(p));
                 var fields = parameters.GetType().GetFields()
-                    .Where(f => !DataAccess.IgnoreAttribute.Test(f));
+                    .Where(f => !IgnoreAttribute.Test(f));
                 foreach (var property in properties)
                 {
                     var value = property.GetValue(parameters, null);
@@ -71,7 +72,7 @@ namespace swxben.dataaccess
             return command;
         }
 
-        public static void AddParameterValueToCommand(SqlCommand command, string name, object value)
+        static void AddParameterValueToCommand(SqlCommand command, string name, object value)
         {
             var parameter = command.CreateParameter();
             parameter.ParameterName = string.Format("@{0}", name);
@@ -87,11 +88,6 @@ namespace swxben.dataaccess
             }
 
             command.Parameters.Add(parameter);
-        }
-
-        public static string GetInsertSqlFor<T>(string tableName = null)
-        {
-            return GetInsertSqlFor(typeof(T), tableName);
         }
 
         public static string GetInsertSqlFor(Type t, string tableName = null)
@@ -139,11 +135,6 @@ namespace swxben.dataaccess
                 identifiersCondition);
         }
 
-        static IEnumerable<string> GetIdentifiers<T>()
-        {
-            return GetIdentifiers(typeof(T));
-        }
-
         static IEnumerable<string> GetIdentifiers(Type t)
         {
             var fields = t.GetFields().Where(IdentifierAttribute.Test).Select(f => f.Name);
@@ -151,10 +142,10 @@ namespace swxben.dataaccess
             return fields.Concat(properties);
         }
 
-        public static IEnumerable<string> GetAllFieldNames(Type t)
+        static IEnumerable<string> GetAllFieldNames(Type t)
         {
-            var fieldNames = t.GetFields().Where(f => !DataAccess.IgnoreAttribute.Test(f)).Select(f => f.Name);
-            var propertyNames = t.GetProperties().Where(p => !DataAccess.IgnoreAttribute.Test(p)).Select(p => p.Name);
+            var fieldNames = t.GetFields().Where(f => !IgnoreAttribute.Test(f)).Select(f => f.Name);
+            var propertyNames = t.GetProperties().Where(p => !IgnoreAttribute.Test(p)).Select(p => p.Name);
             return fieldNames.Concat(propertyNames);
         }
 
@@ -171,12 +162,12 @@ namespace swxben.dataaccess
                 orderByPart);
         }
 
-        public static string GetTableName(Type t)
+        static string GetTableName(Type t)
         {
             return t.Name + "s";
         }
 
-        public static string GetWhereForCriteria(object criteria)
+        static string GetWhereForCriteria(object criteria)
         {
             var wherePart = new StringBuilder();
             if (criteria != null)

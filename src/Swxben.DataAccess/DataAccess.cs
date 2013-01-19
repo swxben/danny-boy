@@ -101,7 +101,7 @@ namespace swxben.dataaccess
 
         public void Insert<T>(T value, string tableName = null)
         {
-            var sql = GetInsertSqlFor<T>(tableName);
+            var sql = GetInsertSqlFor(typeof(T), tableName);
             ExecuteCommand(sql, value);
         }
 
