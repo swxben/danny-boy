@@ -209,23 +209,23 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]')
             ExecuteCommand(sql);
         }
 
-        public bool Any<T>(object criteria = null)
+        public bool Any<T>(object where = null)
         {
-            return Any(typeof(T), criteria);
+            return Any(typeof(T), where);
         }
 
-        public bool Any(Type t, object criteria = null)
+        public bool Any(Type t, object where = null)
         {
-            return Any(DataAccessSqlGeneration.GetTableName(t), criteria);
+            return Any(DataAccessSqlGeneration.GetTableName(t), where);
         }
 
-        public bool Any(string tableName, object criteria = null)
+        public bool Any(string tableName, object where = null)
         {
             var sql = string.Format(
                 "SELECT 1 FROM {0} {1}",
                 tableName,
-                DataAccessSqlGeneration.GetWhereForCriteria(criteria));
-            return ExecuteQuery(sql, criteria).Any();
+                DataAccessSqlGeneration.GetWhereForCriteria(where));
+            return ExecuteQuery(sql, where).Any();
         }
     }
 }

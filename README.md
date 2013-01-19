@@ -92,7 +92,7 @@ The table name can be passed in explicitly without relying on the type name:
 
     var myThings = dataAccess.Select("MyThings");   // returns IEnumerable<dynamic>
     var myThings = dataAccess.Select<Thing>("MyThings");    // returns IEnumerable<Thing>
-    
+
 
 
 ### Execute arbitrary queries
@@ -181,7 +181,7 @@ This could also be used in place of the factory method above for DTOs with a non
 
 - `DropTable(string tableName)` drops the specified table if it exists. This is useful for automated tests.
 - `TestConnection()` returns any exception thrown when opening the connection. If there are no exceptions, null is returned. This is used to test the connection without bombing out the application.
-- `Any<T>(object criteria = null)` returns a boolean indicating if there are any rows in the specified table that satisfy the specified criteria.
+- `Any<T>(object where = null)` returns a boolean indicating if there are any rows in the specified table that satisfy the specified criteria. Also `Any(Type t, object where = null)` and `Any(string tableName, object where = null)`.
 
 
 ## Contribute
