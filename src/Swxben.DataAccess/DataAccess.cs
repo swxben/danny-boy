@@ -3,26 +3,11 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
-using System.Reflection;
 
 namespace swxben.dataaccess
 {
     public partial class DataAccess : IDataAccess
     {
-        [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-        public class IgnoreAttribute : Attribute
-        {
-            public static bool Test(FieldInfo field) { return Attribute.IsDefined(field, typeof(IgnoreAttribute)); }
-            public static bool Test(PropertyInfo property) { return Attribute.IsDefined(property, typeof(IgnoreAttribute)); }
-        }
-
-        [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-        public class IdentifierAttribute : Attribute
-        {
-            public static bool Test(FieldInfo field) { return Attribute.IsDefined(field, typeof(IdentifierAttribute)); }
-            public static bool Test(PropertyInfo property) { return Attribute.IsDefined(property, typeof(IdentifierAttribute)); }
-        }
-
         readonly string _connectionString = "";
 
         public DataAccess(string connectionString)
