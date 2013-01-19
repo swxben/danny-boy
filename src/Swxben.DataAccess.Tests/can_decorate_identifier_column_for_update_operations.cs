@@ -18,7 +18,7 @@ namespace Tests
         [Test]
         public void update_sql_uses_identifier_property()
         {
-            var sql = DataAccess.GetUpdateSqlFor<Example>();
+            var sql = DataAccessSqlGeneration.GetUpdateSqlFor(typeof(Example));
             sql.ShouldBeCloseTo("UPDATE Examples SET Name = @Name WHERE 1=1 AND ExampleGuid = @ExampleGuid");
         }
 
@@ -36,8 +36,8 @@ namespace Tests
         [Test]
         public void condition_is_correct_for_compound_identifiers()
         {
-            DataAccess
-                .GetUpdateSqlFor<CompoundIdentifierExample>()
+            DataAccessSqlGeneration
+                .GetUpdateSqlFor(typeof(CompoundIdentifierExample))
                 .ShouldBeCloseTo("UPDATE CompoundIdentifierExamples SET Name = @Name WHERE 1=1 AND IdentifierPartOneGuid = @IdentifierPartOneGuid AND IdentifierPartTwoGuid = @IdentifierPartTwoGuid AND IdentifierPartThree = @IdentifierPartThree");
         }
 
@@ -58,16 +58,8 @@ namespace Tests
         [Test]
         public void sql_is_correct_for_identifiers_and_ignores()
         {
-            DataAccess
-                .GetUpdateSqlFor<DtoWithIdentifiersAndIgnores>()
-                .ShouldBeCloseTo("UPDATE DtoWithIdentifiersAndIgnoress SET Name = @Name, Age = @Age WHERE 1=1 AND DtoGuidPartOne = @DtoGuidPartOne AND DtoGuidPartTwo = @DtoGuidPartTwo");
-        }
-
-        [Test]
-        public void passing_empty_set_of_identifiers_uses_decorated_identifiers()
-        {
-            DataAccess
-                .GetUpdateSqlFor<DtoWithIdentifiersAndIgnores>(new string[0])
+            DataAccessSqlGeneration
+                .GetUpdateSqlFor(typeof(DtoWithIdentifiersAndIgnores))
                 .ShouldBeCloseTo("UPDATE DtoWithIdentifiersAndIgnoress SET Name = @Name, Age = @Age WHERE 1=1 AND DtoGuidPartOne = @DtoGuidPartOne AND DtoGuidPartTwo = @DtoGuidPartTwo");
         }
     }

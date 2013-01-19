@@ -23,8 +23,8 @@ namespace Tests
         [Test]
         public void sql_is_sane()
         {
-            DataAccess
-                .GetUpdateSqlFor<Example>("ExampleGuid", "CompoundPartTwo", "CompoundPartThree")
+            DataAccessSqlGeneration
+                .GetUpdateSqlFor(typeof(Example), new[]{"ExampleGuid", "CompoundPartTwo", "CompoundPartThree"})
                 .ShouldBeCloseTo("UPDATE Examples SET Name = @Name, Age = @Age WHERE 1=1 AND ExampleGuid = @ExampleGuid AND CompoundPartTwo = @CompoundPartTwo AND CompoundPartThree = @CompoundPartThree");
         }
     }

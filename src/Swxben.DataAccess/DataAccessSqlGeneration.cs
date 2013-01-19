@@ -6,7 +6,7 @@ using System.Text;
 
 namespace swxben.dataaccess
 {
-    internal class DataAccessSqlGeneration
+    public class DataAccessSqlGeneration
     {
         public static object GetValue(object value, Type type)
         {
@@ -58,21 +58,27 @@ namespace swxben.dataaccess
 
             if (value != null && value.GetType().IsEnum) value = value.ToString();
 
-            parameter.Value = value == null ? DBNull.Value : value;
+            parameter.Value = value ?? DBNull.Value;
 
-            if (value != null && value.GetType() == typeof(string))
+            var s = value as string;
+            if (s != null)
             {
-                parameter.Size = ((string)value).Length > 4000 ? -1 : 4000;
+                parameter.Size = s.Length > 4000 ? -1 : 4000;
             }
 
             command.Parameters.Add(parameter);
         }
 
-        public static string GetInsertSqlFor<T>()
+        public static string GetInsertSqlFor<T>(string tableName = null)
+        {
+            return GetInsertSqlFor(typeof (T), tableName);
+        }
+
+        public static string GetInsertSqlFor(Type t, string tableName = null)
         {
             var fieldsSql = new StringBuilder();
             var valuesSql = new StringBuilder();
-            foreach (var field in GetAllFieldNames<T>())
+            foreach (var field in GetAllFieldNames(t))
             {
                 if (!string.IsNullOrEmpty(fieldsSql.ToString()))
                 {
@@ -85,16 +91,18 @@ namespace swxben.dataaccess
 
             return string.Format(
                 "INSERT INTO {0}({1}) VALUES({2})",
-                GetTableName<T>(),
+                tableName ?? GetTableName(t),
                 fieldsSql,
                 valuesSql);
         }
 
-        public static string GetUpdateSqlFor<T>(params string[] identifiers)
+        public static string GetUpdateSqlFor(Type t, string[] identifiers = null, string tableName = null)
         {
             var set = new StringBuilder();
+            identifiers = identifiers ?? GetIdentifiers(t).ToArray();
+            tableName = tableName ?? GetTableName(t);
 
-            foreach (var field in GetAllFieldNames<T>())
+            foreach (var field in GetAllFieldNames(t))
             {
                 if (identifiers.Any(id => string.Equals(id, field, StringComparison.InvariantCultureIgnoreCase))) continue;
                 if (!string.IsNullOrEmpty(set.ToString())) set.Append(", ");
@@ -106,26 +114,21 @@ namespace swxben.dataaccess
 
             return string.Format(
                 "UPDATE {0} SET {1} WHERE 1=1 {2}",
-                GetTableName<T>(),
+                tableName,
                 set,
                 identifiersCondition);
         }
 
-        public static string GetUpdateSqlFor<T>()
-        {
-            return GetUpdateSqlFor<T>(GetIdentifiers<T>().ToArray());
-        }
-
         static IEnumerable<string> GetIdentifiers<T>()
         {
-            var fields = typeof(T).GetFields().Where(f => DataAccess.IdentifierAttribute.Test(f)).Select(f => f.Name);
-            var properties = typeof(T).GetProperties().Where(p => DataAccess.IdentifierAttribute.Test(p)).Select(p => p.Name);
-            return fields.Concat(properties);
+            return GetIdentifiers(typeof (T));
         }
 
-        public static IEnumerable<string> GetAllFieldNames<T>()
+        static IEnumerable<string> GetIdentifiers(Type t)
         {
-            return GetAllFieldNames(typeof(T));
+            var fields = t.GetFields().Where(f => DataAccess.IdentifierAttribute.Test(f)).Select(f => f.Name);
+            var properties = t.GetProperties().Where(p => DataAccess.IdentifierAttribute.Test(p)).Select(p => p.Name);
+            return fields.Concat(properties);
         }
 
         public static IEnumerable<string> GetAllFieldNames(Type t)
@@ -135,21 +138,22 @@ namespace swxben.dataaccess
             return fieldNames.Concat(propertyNames);
         }
 
-        public static string GetSelectSqlFor<T>(object criteria = null, string orderBy = null)
+        public static string GetSelectSqlFor(Type t, object criteria, string orderBy, string tableName)
         {
+            tableName = tableName ?? GetTableName(t);
             var wherePart = GetWhereForCriteria(criteria);
             var orderByPart = string.IsNullOrEmpty(orderBy) ? "" : string.Format("ORDER BY {0}", orderBy);
 
             return string.Format(
                 "SELECT * FROM {0} {1} {2}",
-                GetTableName<T>(),
+                tableName,
                 wherePart,
                 orderByPart);
         }
 
-        public static string GetTableName<T>()
+        public static string GetTableName(Type t)
         {
-            return typeof (T).Name + "s";
+            return t.Name + "s";
         }
 
         public static string GetWhereForCriteria(object criteria)

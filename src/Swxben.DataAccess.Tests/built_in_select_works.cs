@@ -48,10 +48,7 @@ namespace Tests
             _dataAccess.Insert(new Customer { CustomerId = 3, CustomerName = "A customer" });
             _dataAccess.Insert(new Customer { CustomerId = 4, CustomerName = "Test 4" });
 
-            _dataAccess
-                .Select<Customer>(new { CustomerName = "A customer" })
-                .Count()
-                .ShouldBe(2);
+            _dataAccess.Select<Customer>(where: new { CustomerName = "A customer" }).Count().ShouldBe(2);
         }
 
         [Test]
@@ -66,7 +63,7 @@ namespace Tests
             _dataAccess.Insert(new Customer { CustomerId = 3, CustomerName = "Test 3" });
 
             var results = _dataAccess
-                .Select<Customer>(new
+                .Select<Customer>(where: new
                 {
                     CustomerId = 2,
                     CustomerName = "A customer",

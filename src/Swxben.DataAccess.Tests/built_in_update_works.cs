@@ -8,7 +8,7 @@ namespace Tests
     [TestFixture]
     public class built_in_update_works
     {
-        IDataAccess _dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; User Id=sa; Password=test;");
+        readonly IDataAccess _dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; User Id=sa; Password=test;");
 
         class Customer
         {
@@ -31,7 +31,7 @@ namespace Tests
                 new Customer { CustomerId = 2, CustomerName = "Customer" });
             _dataAccess.Update(
                 new Customer { CustomerId = 2, CustomerName = "Customer updated" },
-                "CustomerId");
+                new [] { "CustomerId" });
 
             _dataAccess
                 .ExecuteQuery<Customer>("SELECT * FROM Customers")

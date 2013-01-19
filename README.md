@@ -1,7 +1,12 @@
 swxben.dataaccess
 =================
 
-Simple data access layer for SQL Server
+Simple data access layer for SQL Server.
+
+
+## Versioning
+
+This project uses [SemVer](http://semver.org) for versioning guidelines. The public interface is what is presented in the `IDataAccess` interface and the attributes/decorators documented below. Relying on the public methods in the `DataAccess` class or other public helper classes may break backwards compatibility even without a new major revision.
 
 
 ## Installation
@@ -28,12 +33,18 @@ This roughly corresponds to:
 
 It actually uses named fields so SQL injection shouldn't be possible in normal use.
 
+The table name can be passed in expicitly without relying on the type name:
+
+    dataAccess.Insert(new { MyId = 13, MyName = "Ben"}, "MyThings");
+
+    INSERT INTO MyThings(MyId, MyName) VALUES(13, 'Ben')
+
 
 ### Update
 
-Update needs the field name for the identifier, rather than using a strict convention:
+Update needs the field name for the identifier, rather than using a strict convention. An array of field names is passed in allowing for compound keys. Note that the field names changed from `params string[]` to `string[]` in version 2.0.0 to allow for explicitly specified table names.
 
-    dataAccess.Update(new MyThing { MyId = 13, MyName = "Ben"}, "MyId");
+    dataAccess.Update(new MyThing { MyId = 13, MyName = "Ben"}, new[] { "MyId" });
 
     UPDATE MyThings SET MyName = 'Ben' WHERE MyId = 13
 
@@ -41,8 +52,7 @@ Compound keys can be specified:
 
     dataAccess.Update(
         new MyThing { ForeignKey1 = 5, ForeignKey2 = 8, AtDate = DateTime.Now }, 
-        "ForeignKey1",
-        "ForeignKey2");
+        new [] { "ForeignKey1", "ForeignKey2" });
 
         UPDATE MyThings SET AtDate = '...' WHERE ForeignKey1 = 5 AND ForeignKey2 = 8
 
@@ -60,6 +70,12 @@ Alternatively, identifier fields can be decorated:
 
 Multiple fields can be decorated with the `DataAccess.Identifier` attribute for compound keys. Specifying the identifier columns using the first overload above will override the decorated fields.
 
+The table name can be passed in explicitly without relying on the type name:
+
+    dataAccess.Update(new[] { MyId = 4, MyName = "Ben"}, new[] { "MyId"}, "MyThings");
+
+    UPDATE MyThings SET MyName = 'Ben' WHERE MyId = 4
+
 
 ### Select
 
@@ -71,6 +87,12 @@ The select method uses a strongly typed DTO:
 	);
 
     SELECT * FROM MyThings WHERE MyName = 'Ben' ORDER BY MyId
+
+The table name can be passed in explicitly without relying on the type name:
+
+    var myThings = dataAccess.Select("MyThings");   // returns IEnumerable<dynamic>
+    var myThings = dataAccess.Select<Thing>("MyThings");    // returns IEnumerable<Thing>
+    
 
 
 ### Execute arbitrary queries

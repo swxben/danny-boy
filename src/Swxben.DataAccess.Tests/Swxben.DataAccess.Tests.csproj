@@ -52,9 +52,11 @@
     <Compile Include="built_in_insert_works.cs" />
     <Compile Include="built_in_select_works.cs" />
     <Compile Include="built_in_update_works.cs" />
+    <Compile Include="can_decorate_a_class_with_a_table_name.cs" />
     <Compile Include="can_decorate_identifier_column_for_update_operations.cs" />
     <Compile Include="can_ignore_properties_in_autogen_insert_and_update.cs" />
     <Compile Include="can_insert_null_into_a_column.cs" />
+    <Compile Include="can_pass_table_name_in_to_insert_update_and_select.cs" />
     <Compile Include="can_query_into_a_type_without_a_parameterless_constructor.cs" />
     <Compile Include="can_read_and_write_enums_as_a_string_field.cs" />
     <Compile Include="can_read_and_write_nullable_enums_as_string.cs" />

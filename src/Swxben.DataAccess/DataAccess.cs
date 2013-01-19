@@ -23,7 +23,7 @@ namespace swxben.dataaccess
             public static bool Test(PropertyInfo property) { return Attribute.IsDefined(property, typeof(IdentifierAttribute)); }
         }
 
-        string _connectionString = "";
+        readonly string _connectionString = "";
 
         public DataAccess(string connectionString)
         {
@@ -119,47 +119,69 @@ namespace swxben.dataaccess
             }
         }
 
-        public void Insert<T>(T value)
+        public void Insert<T>(T value, string tableName = null)
         {
-            ExecuteCommand(GetInsertSqlFor<T>(), value);
+            var sql = DataAccessSqlGeneration.GetInsertSqlFor<T>(tableName);
+            ExecuteCommand(sql, value);
         }
 
-        public void Update<T>(T value, params string[] identifiers)
+        public void Update<T>(T value, string[] identifiers = null, string tableName = null)
         {
-            ExecuteCommand(GetUpdateSqlFor<T>(identifiers), value);
+            var sql = DataAccessSqlGeneration.GetUpdateSqlFor(typeof(T), identifiers, tableName);
+            ExecuteCommand(sql, value);
         }
 
         public IEnumerable<T> Select<T>(
+            string tableName = null,
             object where = null,
             string orderBy = null
             ) where T : new()
         {
-            return ExecuteQuery<T>(GetSelectSqlFor<T>(where, orderBy), where);
+            var sql = DataAccessSqlGeneration.GetSelectSqlFor(typeof(T), where, orderBy, tableName);
+            return ExecuteQuery<T>(sql, where);
         }
 
         public IEnumerable<T> Select<T>(
             Func<T> factory,
+            string tableName = null,
             object where = null,
-            string orderBy = null)
+            string orderBy = null
+            )
         {
-            return ExecuteQuery(factory, GetSelectSqlFor<T>(where, orderBy), where);
+
+            var sql = DataAccessSqlGeneration.GetSelectSqlFor(typeof(T), where, orderBy, tableName);
+            return ExecuteQuery(factory, sql, where);
         }
 
         public IEnumerable<T> Select<T>(
             Func<dynamic, T> transform,
+            string tableName = null,
+            object where = null,
+            string orderBy = null
+            )
+        {
+            var sql = DataAccessSqlGeneration.GetSelectSqlFor(typeof(T), where, orderBy, tableName);
+            return ExecuteQuery(transform, sql, where);
+        }
+
+        public IEnumerable<dynamic> Select(
+            string tableName = null,
+            object where = null,
+            string orderBy = null
+            )
+        {
+            var sql = DataAccessSqlGeneration.GetSelectSqlFor(null, where, orderBy, tableName);
+            return ExecuteQuery(sql, where);
+        }
+
+        public IEnumerable<dynamic> Select(
+            Func<dynamic, dynamic> transform,
+            string tableName = null,
             object where = null,
             string orderBy = null)
         {
-            return ExecuteQuery(transform, GetSelectSqlFor<T>(where, orderBy), where);
-        }
-
-        public void DropTable(string tableName)
-        {
-            var sql = string.Format(@"
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]') AND type IN (N'U'))
-    DROP TABLE {0}", tableName);
-
-            ExecuteCommand(sql);
+            var sql = DataAccessSqlGeneration.GetSelectSqlFor(null, where, orderBy, tableName);
+            return ExecuteQuery(transform, sql, where);
         }
 
         public Exception TestConnection()
@@ -178,27 +200,30 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]')
             }
         }
 
-        public static string GetInsertSqlFor<T>()
+        public void DropTable(string tableName)
         {
-            return DataAccessSqlGeneration.GetInsertSqlFor<T>();
-        }
+            var sql = string.Format(@"
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]') AND type IN (N'U'))
+    DROP TABLE {0}", tableName);
 
-        public static string GetUpdateSqlFor<T>(params string[] identifiers)
-        {
-            if (identifiers.Any()) return DataAccessSqlGeneration.GetUpdateSqlFor<T>(identifiers);
-            return DataAccessSqlGeneration.GetUpdateSqlFor<T>();
-        }
-
-        public static string GetSelectSqlFor<T>(object criteria = null, string orderBy = null)
-        {
-            return DataAccessSqlGeneration.GetSelectSqlFor<T>(criteria, orderBy);
+            ExecuteCommand(sql);
         }
 
         public bool Any<T>(object criteria = null)
         {
+            return Any(typeof(T), criteria);
+        }
+
+        public bool Any(Type t, object criteria = null)
+        {
+            return Any(DataAccessSqlGeneration.GetTableName(t), criteria);
+        }
+
+        public bool Any(string tableName, object criteria = null)
+        {
             var sql = string.Format(
-                "SELECT 1 FROM {0} {1}", 
-                DataAccessSqlGeneration.GetTableName<T>(), 
+                "SELECT 1 FROM {0} {1}",
+                tableName,
                 DataAccessSqlGeneration.GetWhereForCriteria(criteria));
             return ExecuteQuery(sql, criteria).Any();
         }
