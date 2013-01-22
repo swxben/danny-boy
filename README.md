@@ -21,6 +21,23 @@ Create a new `DataAccess` instance and pass in the database connection string (d
     IDataAccess dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; User Id=sa; Password=test;");
 
 
+### Select
+
+The select method uses a strongly typed DTO:
+
+    var myThings = dataAccess.Select<MyThing>(
+        where: new { MyName = "Ben" },
+        orderBy: "MyId"
+    );
+
+    SELECT * FROM MyThings WHERE MyName = 'Ben' ORDER BY MyId
+
+The table name can be passed in explicitly without relying on the type name:
+
+    var myThings = dataAccess.Select("MyThings");   // returns IEnumerable<dynamic>
+    var myThings = dataAccess.Select<Thing>("MyThings");    // returns IEnumerable<Thing>
+
+
 ### Insert
 
 Insert using strongly typed DTOs. The table name is by convention the type name plus `s`.
@@ -75,24 +92,6 @@ The table name can be passed in explicitly without relying on the type name:
     dataAccess.Update(new[] { MyId = 4, MyName = "Ben"}, new[] { "MyId"}, "MyThings");
 
     UPDATE MyThings SET MyName = 'Ben' WHERE MyId = 4
-
-
-### Select
-
-The select method uses a strongly typed DTO:
-
-	var myThings = dataAccess.Select<MyThing>(
-		where: new { MyName = "Ben" },
-		orderBy: "MyId"
-	);
-
-    SELECT * FROM MyThings WHERE MyName = 'Ben' ORDER BY MyId
-
-The table name can be passed in explicitly without relying on the type name:
-
-    var myThings = dataAccess.Select("MyThings");   // returns IEnumerable<dynamic>
-    var myThings = dataAccess.Select<Thing>("MyThings");    // returns IEnumerable<Thing>
-
 
 
 ### Execute arbitrary queries
