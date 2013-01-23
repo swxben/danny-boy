@@ -22,5 +22,6 @@ namespace swxben.dataaccess
         bool Any<T>(object where = null);
         bool Any(Type t, object where = null);
         bool Any(string tableName, object where = null);
+        string GetDatabaseName();
     }
 }

@@ -15,6 +15,21 @@ namespace swxben.dataaccess
             _connectionString = connectionString;
         }
 
+        public string GetDatabaseName()
+        {
+            if (_connectionString.Contains("Initial Catalog"))
+            {
+                var db = _connectionString.Split(';').FirstOrDefault(s => s.Trim().StartsWith("Initial Catalog="));
+                return db == null ? "" : db.Trim().Replace("Initial Catalog=", "");
+            }
+            if (_connectionString.Contains("Database"))
+            {
+                var db = _connectionString.Split(';').FirstOrDefault(s => s.Trim().StartsWith("Database="));
+                return db == null ? "" : db.Trim().Replace("Database=", "");
+            }
+            return "";
+        }
+
         public int ExecuteCommand(string sql, object parameters = null)
         {
             using (var connection = new SqlConnection(_connectionString))
