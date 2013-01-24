@@ -42,13 +42,11 @@ namespace swxben.dataaccess
             return value;
         }
 
-        static SqlCommand GetCommand(string sql, SqlConnection connection, object parameters)
+        static SqlCommand GetCommand(object parameters)
         {
             var command = new SqlCommand
                 {
-                    CommandType = System.Data.CommandType.Text, 
-                    Connection = connection, 
-                    CommandText = sql
+                    CommandType = System.Data.CommandType.Text
                 };
 
             if (parameters != null)
