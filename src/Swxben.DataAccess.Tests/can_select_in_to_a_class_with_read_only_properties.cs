@@ -9,7 +9,7 @@ namespace Tests
     [TestFixture]
     public class can_select_in_to_a_class_with_read_only_properties
     {
-        IDataAccess _dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; User Id=sa; Password=test;");
+        readonly IDataAccess _dataAccess = new DataAccess(TestConfiguration.CONNECTION_STRING);
 
         [SetUp, TearDown]
         public void set_up_and_tear_down()
