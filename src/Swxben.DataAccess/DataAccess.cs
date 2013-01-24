@@ -32,23 +32,30 @@ namespace swxben.dataaccess
 
         public int ExecuteCommand(string sql, object parameters = null)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using (var connection = OpenConnection())
             {
-                var command = GetCommand(sql, connection, parameters);
-
-                connection.Open();
+                var command = GetCommand(parameters);
+                command.Connection = connection;
+                command.CommandText = sql;
 
                 return command.ExecuteNonQuery();
             }
         }
 
+        SqlConnection OpenConnection()
+        {
+            var connection = new SqlConnection(_connectionString);
+            connection.Open();
+            return connection;
+        }
+
         public IEnumerable<dynamic> ExecuteQuery(string sql, object parameters = null)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using (var connection = OpenConnection())
             {
-                var command = GetCommand(sql, connection, parameters);
-
-                connection.Open();
+                var command = GetCommand(parameters);
+                command.Connection = connection;
+                command.CommandText = sql;
 
                 using (var reader = command.ExecuteReader())
                 {
@@ -75,7 +82,7 @@ namespace swxben.dataaccess
                 var resultDictionary = result as IDictionary<string, object>;
                 var t = new T();
 
-                ReadResultIntoObject<T>(resultDictionary, t);
+                ReadResultIntoObject(resultDictionary, t);
 
                 return t;
             });
@@ -88,7 +95,7 @@ namespace swxben.dataaccess
                 var resultDictionary = result as IDictionary<string, object>;
                 var t = factory();
 
-                ReadResultIntoObject<T>(resultDictionary, t);
+                ReadResultIntoObject(resultDictionary, t);
 
                 return t;
             });
@@ -99,10 +106,17 @@ namespace swxben.dataaccess
             return ExecuteQuery(sql, parameters).Select(transform);
         }
 
-        public void Insert<T>(T value, string tableName = null)
+        public dynamic Insert<T>(T value, string tableName = null)
         {
-            var sql = GetInsertSqlFor(typeof(T), tableName);
-            ExecuteCommand(sql, value);
+            using (var connection = OpenConnection())
+            {
+                var command = GetCommand(value);
+                command.Connection = connection;
+                command.CommandText = GetInsertSqlFor(typeof(T), tableName);
+                command.ExecuteNonQuery();
+                command.CommandText = "SELECT @@IDENTITY AS id";
+                return command.ExecuteScalar();
+            }
         }
 
         public void Update<T>(T value, string[] identifiers = null, string tableName = null)
@@ -168,9 +182,8 @@ namespace swxben.dataaccess
         {
             try
             {
-                using (var connection = new SqlConnection(_connectionString))
+                using (OpenConnection())
                 {
-                    connection.Open();
                     return null;
                 }
             }

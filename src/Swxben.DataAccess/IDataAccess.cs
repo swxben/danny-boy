@@ -10,7 +10,7 @@ namespace swxben.dataaccess
         IEnumerable<T> ExecuteQuery<T>(string sql, object parameters = null) where T : new();
         IEnumerable<T> ExecuteQuery<T>(Func<T> factory, string sql, object parameters = null);
         IEnumerable<T> ExecuteQuery<T>(Func<dynamic, T> transform, string sql, object parameters = null);
-        void Insert<T>(T value, string tableName = null);
+        dynamic Insert<T>(T value, string tableName = null);
         void Update<T>(T value, string[] identifiers = null, string tableName = null);
         IEnumerable<T> Select<T>(string tableName = null, object where = null, string orderBy = null) where T : new();
         IEnumerable<T> Select<T>(Func<T> factory, string tableName = null, object where = null, string orderBy = null);

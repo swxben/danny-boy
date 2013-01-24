@@ -56,6 +56,10 @@ The table name can be passed in expicitly without relying on the type name:
 
     INSERT INTO MyThings(MyId, MyName) VALUES(13, 'Ben')
 
+The value of `@@IDENTITY` is returned as a dynamic object by the `Insert` method.
+
+    note.NoteId = (int)dataAccess.Insert(note);
+
 
 ### Update
 
