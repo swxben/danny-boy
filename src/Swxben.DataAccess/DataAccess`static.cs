@@ -90,10 +90,12 @@ namespace swxben.dataaccess
 
         public static string GetInsertSqlFor(Type t, string tableName = null)
         {
+            var identifiers = GetIntIdentifiers(t).ToArray();
             var fieldsSql = new StringBuilder();
             var valuesSql = new StringBuilder();
             foreach (var field in GetAllFieldNames(t))
             {
+                if (FieldIsIdentifier(field, identifiers)) continue;
                 if (!string.IsNullOrEmpty(fieldsSql.ToString()))
                 {
                     fieldsSql.Append(", ");
@@ -118,7 +120,7 @@ namespace swxben.dataaccess
 
             foreach (var field in GetAllFieldNames(t))
             {
-                if (identifiers.Any(id => string.Equals(id, field, StringComparison.InvariantCultureIgnoreCase))) continue;
+                if (FieldIsIdentifier(field, identifiers)) continue;
                 if (!string.IsNullOrEmpty(set.ToString())) set.Append(", ");
                 set.AppendFormat("{0} = @{0}", field);
             }
@@ -133,10 +135,22 @@ namespace swxben.dataaccess
                 identifiersCondition);
         }
 
+        static bool FieldIsIdentifier(string field, string[] identifiers)
+        {
+            return identifiers.Any(id => string.Equals(id, field, StringComparison.InvariantCultureIgnoreCase));
+        }
+
         static IEnumerable<string> GetIdentifiers(Type t)
         {
             var fields = t.GetFields().Where(IdentifierAttribute.Test).Select(f => f.Name);
             var properties = t.GetProperties().Where(IdentifierAttribute.Test).Select(p => p.Name);
+            return fields.Concat(properties);
+        }
+
+        static IEnumerable<string> GetIntIdentifiers(Type t)
+        {
+            var fields = t.GetFields().Where(f => IdentifierAttribute.Test(f) && f.FieldType == typeof(int)).Select(f => f.Name);
+            var properties = t.GetProperties().Where(p => IdentifierAttribute.Test(p) && p.PropertyType == typeof (int)).Select(p => p.Name);
             return fields.Concat(properties);
         }
 

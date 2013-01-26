@@ -10,10 +10,11 @@ msbuild.exe /ToolsVersion:4.0 "src\swxben.dataaccess\swxben.dataaccess.csproj" /
 echo *** Ready to upload to nuget.org ***
 pause
 
-rem ruby upload-to-nuget.rb
 for %%f in (*.nupkg) do (
 	.nuget\nuget.exe push %%f
 )
 
 copy *.nupkg nupkg_archive\
 del *.nupkg
+
+pause

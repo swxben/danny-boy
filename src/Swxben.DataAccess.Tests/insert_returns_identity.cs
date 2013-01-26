@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using swxben.dataaccess;
 using Shouldly;
+using swxben.dataaccess;
 
 namespace Tests
 {
@@ -51,7 +51,7 @@ CREATE TABLE Things(
             var id5 = _dataAccess.Insert(new { ThingName = "five" }, "Things");
 
             _dataAccess.ExecuteCommand("DELETE FROM Things WHERE ThingId = @id", new { id = id2 });
-            _dataAccess.ExecuteCommand("DELETE FROM Things WHERE ThingId = @id", new { id = id4});
+            _dataAccess.ExecuteCommand("DELETE FROM Things WHERE ThingId = @id", new { id = id4 });
 
             var id6 = _dataAccess.Insert(new { ThingName = "six" }, "Things");
 
@@ -60,5 +60,13 @@ CREATE TABLE Things(
             ((string)six.ThingName).ShouldBe("six");
         }
 
+        [Test]
+        public void insert_return_should_be_castable_to_int()
+        {
+            CreateTable();
+
+            var id = (int)_dataAccess.Insert(new { ThingName = "one" }, "Things");
+            id.ShouldBeTypeOf<int>();
+        }
     }
 }
