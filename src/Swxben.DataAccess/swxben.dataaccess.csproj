@@ -41,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess.cs" />
+    <Compile Include="DataAccess`Any.cs" />
+    <Compile Include="DataAccess`ExecuteScalar.cs" />
     <Compile Include="DataAccess`IdentifierAttribute.cs" />
     <Compile Include="DataAccess`IgnoreAttribute.cs" />
     <Compile Include="DataAccess`static.cs" />

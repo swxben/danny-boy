@@ -22,6 +22,9 @@ namespace swxben.dataaccess
         bool Any<T>(object where = null);
         bool Any(Type t, object where = null);
         bool Any(string tableName, object where = null);
+        bool Exists<T>(object where = null);
+        bool Exists(Type t, object where = null);
+        bool Exists(string tableName, object where = null);
         string GetDatabaseName();
         object ExecuteScalar(string sql, object parameters = null);
         T ExecuteScalar<T>(string sql, object parameters = null);
