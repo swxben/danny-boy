@@ -220,5 +220,15 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]')
                 GetWhereForCriteria(where));
             return ExecuteQuery(sql, where).Any();
         }
+
+        public object ExecuteScalar(string sql, object parameters)
+        {
+            return ((IDictionary<string, object>)ExecuteQuery(sql, parameters).First()).Values.First();
+        }
+
+        public T ExecuteScalar<T>(string sql, object parameters)
+        {
+            return (T)ExecuteScalar(sql, parameters);
+        }
     }
 }

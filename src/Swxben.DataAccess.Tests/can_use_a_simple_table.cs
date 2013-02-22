@@ -9,7 +9,7 @@ namespace Tests
     [TestFixture]
     public class can_use_a_simple_table
     {
-        IDataAccess _dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; User Id=sa; Password=test;");
+        readonly IDataAccess _dataAccess = new DataAccess(TestConfiguration.CONNECTION_STRING);
 
         [SetUp, TearDown]
         public void set_up_and_tear_down()
