@@ -202,33 +202,5 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]')
             ExecuteCommand(sql);
         }
 
-        public bool Any<T>(object where = null)
-        {
-            return Any(typeof(T), where);
-        }
-
-        public bool Any(Type t, object where = null)
-        {
-            return Any(GetTableName(t), where);
-        }
-
-        public bool Any(string tableName, object where = null)
-        {
-            var sql = string.Format(
-                "SELECT 1 FROM {0} {1}",
-                tableName,
-                GetWhereForCriteria(where));
-            return ExecuteQuery(sql, where).Any();
-        }
-
-        public object ExecuteScalar(string sql, object parameters)
-        {
-            return ((IDictionary<string, object>)ExecuteQuery(sql, parameters).First()).Values.First();
-        }
-
-        public T ExecuteScalar<T>(string sql, object parameters)
-        {
-            return (T)ExecuteScalar(sql, parameters);
-        }
     }
 }

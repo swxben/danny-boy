@@ -30,6 +30,7 @@ namespace Tests
         {
             CreateTable();
             _dataAccess.Any<Person>().ShouldBe(false);
+            _dataAccess.Exists<Person>().ShouldBe(false);
         }
 
         [Test]
@@ -38,9 +39,11 @@ namespace Tests
             CreateTable();
 
             _dataAccess.Insert(new Person { Name="Aaa", Age = 123 });
-            
+
             _dataAccess.Any<Person>(new { Name = "bbb" }).ShouldBe(false);
             _dataAccess.Any<Person>(new { Age = 12 }).ShouldBe(false);
+            _dataAccess.Exists<Person>(new { Name = "bbb" }).ShouldBe(false);
+            _dataAccess.Exists<Person>(new { Age = 12 }).ShouldBe(false);
         }
 
         [Test]
@@ -51,6 +54,7 @@ namespace Tests
             _dataAccess.Insert(new Person { Name = "Aaa", Age = 123 });
 
             _dataAccess.Any<Person>().ShouldBe(true);
+            _dataAccess.Exists<Person>().ShouldBe(true);
         }
 
         [Test]
@@ -62,6 +66,8 @@ namespace Tests
 
             _dataAccess.Any<Person>(new { Name = "Aaa" }).ShouldBe(true);
             _dataAccess.Any<Person>(new { Age = 123 }).ShouldBe(true);
+            _dataAccess.Exists<Person>(new { Name = "Aaa" }).ShouldBe(true);
+            _dataAccess.Exists<Person>(new { Age = 123 }).ShouldBe(true);
         }
 
         void CreateTable()
