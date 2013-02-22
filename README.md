@@ -180,6 +180,14 @@ This could also be used in place of the factory method above for DTOs with a non
     var customers = dataAccess.Select(GetCustomer);
 
 
+## ExecuteScalar
+
+Returns the first column of the first result of the specified SQL. Eg:
+
+    var barsCount = dataAccess.ExecuteScalar<int>("SELECT COUNT(*) FROM THINGS WHERE Foo = @Foo", new { Foo = "bar" });
+    var averageScore = ((double)dataAccess.ExecuteScalar("SELECT AVG(Age) FROM Things"));
+
+
 ### Other methods
 
 - `DropTable(string tableName)` drops the specified table if it exists. This is useful for automated tests.

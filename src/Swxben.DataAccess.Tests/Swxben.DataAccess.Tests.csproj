@@ -63,6 +63,7 @@
     <Compile Include="can_select_in_to_a_class_with_read_only_properties.cs" />
     <Compile Include="can_use_a_simple_table.cs" />
     <Compile Include="can_use_compound_identifiers.cs" />
+    <Compile Include="execute_scalar_tests.cs" />
     <Compile Include="GetDatabaseName_is_sane.cs" />
     <Compile Include="get_insert_sql_is_sane.cs" />
     <Compile Include="get_select_sql_is_sane.cs" />
