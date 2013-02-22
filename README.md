@@ -180,7 +180,7 @@ This could also be used in place of the factory method above for DTOs with a non
     var customers = dataAccess.Select(GetCustomer);
 
 
-## ExecuteScalar
+### ExecuteScalar
 
 Returns the first column of the first result of the specified SQL. Eg:
 
@@ -188,11 +188,26 @@ Returns the first column of the first result of the specified SQL. Eg:
     var averageScore = ((double)dataAccess.ExecuteScalar("SELECT AVG(Age) FROM Things"));
 
 
+### Any, Exists
+
+Returns a boolean indicating if there are any rows in the specified table that satisfy the specified criteria.
+
+    Any<T>(object where = null)
+    Any(Type t, object where = null)
+    Any(string tableName, object where = null)
+
+`Exists` methods alias the corresponding `Any` methods:
+
+    Exists<T>(object where = null)
+    Exists(Type t, object where = null)
+    Exists(string tableName, object where = null)
+
+
+
 ### Other methods
 
 - `DropTable(string tableName)` drops the specified table if it exists. This is useful for automated tests.
 - `TestConnection()` returns any exception thrown when opening the connection. If there are no exceptions, null is returned. This is used to test the connection without bombing out the application.
-- `Any<T>(object where = null)` returns a boolean indicating if there are any rows in the specified table that satisfy the specified criteria. Also `Any(Type t, object where = null)` and `Any(string tableName, object where = null)`.
 - `GetDatabaseName()` returns the name of the database, extracted from the connection string.
 
 
