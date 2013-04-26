@@ -1,5 +1,5 @@
-swxben.dataaccess
-=================
+Danny Boy
+=========
 
 Simple data access layer for SQL Server.
 
@@ -11,12 +11,12 @@ This project uses [SemVer](http://semver.org) for versioning guidelines. The pub
 
 ## Installation
 
-Install the engine via [NuGet](http://nuget.org/packages/swxben.dataaccess), either in Visual Studio (right-click project, Manage NuGet Packages, search for docxtemplateengine) or via the package manager console using `Install-Package swxben.dataaccess`.
+Install the engine via [NuGet](http://nuget.org/packages/swxben.dannyboy), either in Visual Studio (right-click project, Manage NuGet Packages, search for docxtemplateengine) or via the package manager console using `Install-Package swxben.dannyboy`.
 
 
 ## Usage
 
-Create a new `DataAccess` instance and pass in the database connection string (do this with your favourite IoC container):
+Create a new `dannyboy.DataAccess` instance and pass in the database connection string (do this with your favourite IoC container):
 
     IDataAccess dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; User Id=sa; Password=test;");
 
@@ -213,13 +213,13 @@ Returns a boolean indicating if there are any rows in the specified table that s
 
 ## Contribute
 
-If you want to contribute to this project, start by forking the repo: <https://github.com/swxben/swxben.dataaccess>. Create an issue if applicable, create a branch in your fork, and create a pull request when it's ready. Thanks!
+If you want to contribute to this project, start by forking the repo: <https://github.com/swxben/danny-boy>. Create an issue if applicable, create a branch in your fork, and create a pull request when it's ready. Thanks!
 
 ### Contributors
 
 ## Building, running tests and the NuGet package
 
-THe VS2010 solution is in the root folder. Unit tests (src\Swxben.DataAccess.Tests\bin\Debug\Swxben.DataAccess.Tests.dll) can be run in a console using `tests.bat`. The NuGet package can be built by running `build-nuget-package.cmd`. A database named `swxben_dataaccess` running on `.\sqlexpress` is needed.
+THe VS2010 solution is in the root folder. Unit tests (src\swxben.dannyboy.Tests\bin\Debug\swxben.dannyboy.Tests.dll) can be run in a console using `tests.bat`. The NuGet package can be built by running `build-nuget-package.cmd`. A database named `swxben_dataaccess` running on `.\sqlexpress` is needed.
 
 
 ## Licenses
