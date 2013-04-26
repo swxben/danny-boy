@@ -11,7 +11,7 @@ This project uses [SemVer](http://semver.org) for versioning guidelines. The pub
 
 ## Installation
 
-Install the engine via [NuGet](http://nuget.org/packages/swxben.dannyboy), either in Visual Studio (right-click project, Manage NuGet Packages, search for docxtemplateengine) or via the package manager console using `Install-Package swxben.dannyboy`.
+Install the engine via [NuGet](http://nuget.org/packages/dannyboy), either in Visual Studio (right-click project, Manage NuGet Packages, search for docxtemplateengine) or via the package manager console using `Install-Package dannyboy`.
 
 
 ## Usage

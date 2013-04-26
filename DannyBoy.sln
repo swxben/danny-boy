@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "swxben.dannyboy", "src\swxben.dannyboy\swxben.dannyboy.csproj", "{5B9AFF58-4D74-416E-A655-18FF95E52C6B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dannyboy", "src\dannyboy\dannyboy.csproj", "{5B9AFF58-4D74-416E-A655-18FF95E52C6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "swxben.dannyboy.tests", "src\swxben.dannyboy.tests\swxben.dannyboy.tests.csproj", "{9A9D2DB6-25B7-4C1F-A682-1E71B40CA72D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dannyboy.tests", "src\dannyboy.tests\dannyboy.tests.csproj", "{9A9D2DB6-25B7-4C1F-A682-1E71B40CA72D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E3D5B327-45FF-4D7C-A494-4E39026D5616}"
 	ProjectSection(SolutionItems) = preProject
