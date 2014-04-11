@@ -7,7 +7,7 @@ namespace dannyboy.tests
     [TestFixture]
     public class built_in_update_works
     {
-        readonly IDataAccess _dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; User Id=sa; Password=test;");
+        readonly IDataAccess _dataAccess = new DataAccess(TestConfiguration.ConnectionString);
 
         class Customer
         {

@@ -7,7 +7,7 @@ namespace dannyboy.tests
     [TestFixture]
     public class ignored_properties_still_get_assigned_when_query_includes_values_for_them
     {
-        IDataAccess _dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; User Id=sa; Password=test;");
+        readonly IDataAccess _dataAccess = new DataAccess(TestConfiguration.ConnectionString);
 
         class Example
         {

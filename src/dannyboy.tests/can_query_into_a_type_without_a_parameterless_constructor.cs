@@ -7,7 +7,7 @@ namespace dannyboy.tests
     [TestFixture]
     class can_query_into_a_type_without_a_parameterless_constructor
     {
-        IDataAccess _dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; User Id=sa; Password=test;");
+        readonly IDataAccess _dataAccess = new DataAccess(TestConfiguration.ConnectionString);
 
         class VampireService
         { }

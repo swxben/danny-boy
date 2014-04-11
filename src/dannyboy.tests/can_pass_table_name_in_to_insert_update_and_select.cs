@@ -7,7 +7,7 @@ namespace dannyboy.tests
     [TestFixture]
     public class can_pass_table_name_in_to_insert_update_and_select
     {
-        readonly IDataAccess _dataAccess = new DataAccess(TestConfiguration.CONNECTION_STRING);
+        readonly IDataAccess _dataAccess = new DataAccess(TestConfiguration.ConnectionString);
 
         [SetUp, TearDown]
         public void set_up_and_tear_down()

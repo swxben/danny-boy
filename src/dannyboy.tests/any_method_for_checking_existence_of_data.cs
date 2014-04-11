@@ -12,7 +12,7 @@ namespace dannyboy.tests
             public int Age;
         }
 
-        readonly IDataAccess _dataAccess = new DataAccess(TestConfiguration.CONNECTION_STRING);
+        readonly IDataAccess _dataAccess = new DataAccess(TestConfiguration.ConnectionString);
 
         [SetUp, TearDown]
         public void set_up_and_tear_down()

@@ -7,7 +7,7 @@ namespace dannyboy.tests
     [TestFixture]
     public class can_read_and_write_enums_as_a_string_field
     {
-        IDataAccess _dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; User Id=sa; Password=test;");
+        readonly IDataAccess _dataAccess = new DataAccess(TestConfiguration.ConnectionString);
 
         [SetUp, TearDown]
         public void set_up_and_tear_down()

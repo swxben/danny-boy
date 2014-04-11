@@ -2,6 +2,6 @@
 {
     public class TestConfiguration
     {
-        public const string CONNECTION_STRING = @"Server=.\sqlexpress; Database=swxben_dataaccess; User Id=sa; Password=test;";
+        public const string ConnectionString = @"Server=.\sqlexpress; Database=swxben_dataaccess; Integrated Security=true;";
     }
 }

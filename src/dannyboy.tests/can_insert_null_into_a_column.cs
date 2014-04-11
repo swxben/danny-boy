@@ -8,7 +8,7 @@ namespace dannyboy.tests
     [TestFixture]
     public class can_insert_null_into_a_column
     {
-        IDataAccess _dataAccess = new DataAccess(TestConfiguration.CONNECTION_STRING);
+        IDataAccess _dataAccess = new DataAccess(TestConfiguration.ConnectionString);
 
 
         [SetUp, TearDown]

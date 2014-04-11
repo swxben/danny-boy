@@ -37,6 +37,19 @@ The table name can be passed in explicitly without relying on the type name:
     var myThings = dataAccess.Select("MyThings");   // returns IEnumerable<dynamic>
     var myThings = dataAccess.Select<Thing>("MyThings");    // returns IEnumerable<Thing>
 
+Public auto-implemented properties with a public or protected setter are automatically set, as are non-auto-implemented properties with a public, protected or private setter. Protected and private properties, as well as public auto-implemented properties with a private setter, are not automatically set.
+
+    // can be set:
+    public string Foo { get; set }
+    public string Foo { get; protected set; }
+    public string Foo { get { .. } set { .. } }
+    public string Foo { get { .. } protected set { .. } }
+    public string Foo { get { .. } private set { .. } }
+
+    // cannot be set:
+    public string Foo { get; private set; }
+    protected string Foo { get; set; }
+    private string Foo { get; set; }
 
 ### Insert
 

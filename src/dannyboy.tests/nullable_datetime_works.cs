@@ -8,7 +8,7 @@ namespace dannyboy.tests
     [TestFixture]
     public class nullable_datetime_works
     {
-        IDataAccess _dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; User Id=sa; Password=test;");
+        readonly IDataAccess _dataAccess = new DataAccess(TestConfiguration.ConnectionString);
 
         class Customer
         {

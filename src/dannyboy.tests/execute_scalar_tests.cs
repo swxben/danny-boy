@@ -6,7 +6,7 @@ namespace dannyboy.tests
     [TestFixture]
     public class execute_scalar_tests
     {
-        readonly IDataAccess _dataAccess = new DataAccess(TestConfiguration.CONNECTION_STRING);
+        readonly IDataAccess _dataAccess = new DataAccess(TestConfiguration.ConnectionString);
 
         [SetUp, TearDown]
         public void set_up_and_tear_down()
