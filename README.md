@@ -37,6 +37,8 @@ The table name can be passed in explicitly without relying on the type name:
     var myThings = dataAccess.Select("MyThings");   // returns IEnumerable<dynamic>
     var myThings = dataAccess.Select<Thing>("MyThings");    // returns IEnumerable<Thing>
 
+#### Properties
+
 Public auto-implemented properties with a public or protected setter are automatically set, as are non-auto-implemented properties with a public, protected or private setter. Protected and private properties, as well as public auto-implemented properties with a private setter, are not automatically set.
 
     // can be set:
@@ -50,6 +52,18 @@ Public auto-implemented properties with a public or protected setter are automat
     public string Foo { get; private set; }
     protected string Foo { get; set; }
     private string Foo { get; set; }
+
+#### Default constructors
+
+Prior to version 2.6.0, only classes with public default constructors could be automatially instantiated. Beginning with version 2.6.0, classes with public, protected or private default constructors can be automatically instantiated. Non-default constructors are ignored, unless explicitly called using the `factory` parameter. A class without a default constructor cannot be automatically instantiated.
+
+    // Cannot be automatically instantiated using dataAccess.ExecuteQuery<Foo>(".."):
+    public class Foo
+    {
+        public Foo(int bar) { }
+
+        public int Bar { get; set; }
+    }
 
 ### Insert
 
@@ -233,6 +247,14 @@ If you want to contribute to this project, start by forking the repo: <https://g
 ## Building, running tests and the NuGet package
 
 THe VS2010 solution is in the root folder. Unit tests (src\swxben.dannyboy.Tests\bin\Debug\swxben.dannyboy.Tests.dll) can be run in a console using `tests.bat`. The NuGet package can be built by running `build-nuget-package.cmd`. A database named `swxben_dataaccess` running on `.\sqlexpress` is needed.
+
+
+## Version history
+
+### 2.6.0
+
+- Remove entity type `new()` generic constraint on query methods
+- Search for a default public, protected or private constructor when attempting to instantiate a new entity type
 
 
 ## Licenses

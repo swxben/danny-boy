@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 
 namespace dannyboy
 {
@@ -75,12 +76,12 @@ namespace dannyboy
             }
         }
 
-        public IEnumerable<T> ExecuteQuery<T>(string sql, object parameters = null) where T : new()
+        public IEnumerable<T> ExecuteQuery<T>(string sql, object parameters = null)
         {
             return ExecuteQuery(sql, parameters).Select(result =>
             {
                 var resultDictionary = result as IDictionary<string, object>;
-                var t = new T();
+                var t = Construct<T>();
 
                 ReadResultIntoObject(resultDictionary, t);
 
@@ -129,7 +130,7 @@ namespace dannyboy
             string tableName = null,
             object where = null,
             string orderBy = null
-            ) where T : new()
+            )
         {
             var sql = GetSelectSqlFor(typeof(T), where, orderBy, tableName);
             return ExecuteQuery<T>(sql, where);

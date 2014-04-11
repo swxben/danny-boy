@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace dannyboy
@@ -194,5 +195,20 @@ namespace dannyboy
             return wherePart.ToString();
         }
 
+        static T Construct<T>()
+        {
+            var constructor = typeof (T)
+                .GetConstructors((BindingFlags) int.MaxValue)
+                .FirstOrDefault(x => !x.GetParameters().Any());
+            
+            if (constructor == null)
+            {
+                throw new InvalidEntityTypeException(
+                    string.Format("No parameterless constructors found on type {0}", typeof (T).FullName),
+                    typeof (T));
+            }
+
+            return (T) constructor.Invoke(null);
+        }
     }
 }
