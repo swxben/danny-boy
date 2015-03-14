@@ -29,5 +29,9 @@ namespace dannyboy
         string GetDatabaseName();
         object ExecuteScalar(string sql, object parameters = null);
         T ExecuteScalar<T>(string sql, object parameters = null);
+        void Delete<T>(object @where, string tableName = null);
+        void Delete(Type t, object @where, string tableName = null);
+        void Delete(object @where, string tableName);
+        void Delete(object instance);
     }
 }

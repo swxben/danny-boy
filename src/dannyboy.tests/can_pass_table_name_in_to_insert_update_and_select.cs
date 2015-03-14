@@ -62,7 +62,7 @@ namespace dannyboy.tests
         public void select_sql_is_sane()
         {
             var sql = DataAccess.GetSelectSqlFor(null, null, null, "Things");
-            sql.Trim().ShouldBe("SELECT * FROM Things");
+            sql.Trim().ShouldBe("SELECT * FROM [Things]");
         }
 
         [Test]

@@ -27,8 +27,11 @@ namespace dannyboy
         Task<bool> ExistsAsync<T>(object @where = null);
         Task<bool> ExistsAsync(Type t, object @where = null);
         Task<bool> ExistsAsync(string tableName, object @where = null);
-        string GetDatabaseName();
         Task<object> ExecuteScalarAsync(string sql, object parameters = null);
         Task<T> ExecuteScalarAsync<T>(string sql, object parameters = null);
+        Task DeleteAsync<T>(object @where, string tableName = null);
+        Task DeleteAsync(Type t, object @where, string tableName = null);
+        Task DeleteAsync(object @where, string tableName);
+        Task DeleteAsync(object instance);
     }
 }

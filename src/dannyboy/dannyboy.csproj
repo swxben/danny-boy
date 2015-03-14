@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="DataAccess.cs" />
     <Compile Include="DataAccess`Any.cs" />
+    <Compile Include="DataAccess`Delete.cs" />
     <Compile Include="DataAccess`ExecuteCommand.cs" />
     <Compile Include="DataAccess`ExecuteQuery.cs" />
     <Compile Include="DataAccess`ExecuteScalar.cs" />
