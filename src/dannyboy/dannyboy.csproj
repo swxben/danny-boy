@@ -42,9 +42,13 @@
   <ItemGroup>
     <Compile Include="DataAccess.cs" />
     <Compile Include="DataAccess`Any.cs" />
+    <Compile Include="DataAccess`ExecuteCommand.cs" />
+    <Compile Include="DataAccess`ExecuteQuery.cs" />
     <Compile Include="DataAccess`ExecuteScalar.cs" />
     <Compile Include="DataAccess`IdentifierAttribute.cs" />
     <Compile Include="DataAccess`IgnoreAttribute.cs" />
+    <Compile Include="DataAccess`Insert.cs" />
+    <Compile Include="DataAccess`Select.cs" />
     <Compile Include="DataAccess`static.cs" />
     <Compile Include="IDataAccess.cs" />
     <Compile Include="InvalidEntityTypeException.cs" />
