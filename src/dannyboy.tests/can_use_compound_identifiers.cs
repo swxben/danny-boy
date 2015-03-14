@@ -21,7 +21,7 @@ namespace dannyboy.tests
         {
             DataAccess
                 .GetUpdateSqlFor(typeof(Example), new[] { "ExampleGuid", "CompoundPartTwo", "CompoundPartThree" })
-                .ShouldBeCloseTo("UPDATE Examples SET Name = @Name, Age = @Age WHERE 1=1 AND ExampleGuid = @ExampleGuid AND CompoundPartTwo = @CompoundPartTwo AND CompoundPartThree = @CompoundPartThree");
+                .Trim().ShouldBe("UPDATE Examples SET Name = @Name, Age = @Age WHERE 1=1 AND ExampleGuid = @ExampleGuid AND CompoundPartTwo = @CompoundPartTwo AND CompoundPartThree = @CompoundPartThree");
         }
     }
 }

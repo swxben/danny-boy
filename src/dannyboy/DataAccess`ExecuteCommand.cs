@@ -1,4 +1,6 @@
-﻿namespace dannyboy
+﻿using System.Threading.Tasks;
+
+namespace dannyboy
 {
     public partial class DataAccess
     {
@@ -12,6 +14,11 @@
 
                 return command.ExecuteNonQuery();
             }
+        }
+
+        public Task<int> ExecuteCommandAsync(string sql, object parameters = null)
+        {
+            return Task.FromResult(ExecuteCommand(sql, parameters));
         }
     }
 }

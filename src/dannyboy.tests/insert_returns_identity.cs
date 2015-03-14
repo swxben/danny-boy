@@ -65,7 +65,7 @@ CREATE TABLE Things(
             CreateTable();
 
             var id = (int)_dataAccess.Insert(new { ThingName = "one" }, "Things");
-            id.ShouldBeTypeOf<int>();
+            id.ShouldBeOfType<int>();
         }
     }
 }

@@ -238,6 +238,14 @@ Returns a boolean indicating if there are any rows in the specified table that s
 - `GetDatabaseName()` returns the name of the database, extracted from the connection string.
 
 
+## Versions
+
+### 3.0.0
+
+- Switch to .NET 4.5.1 (breaking change)
+- Async versions of all methods on IDataAccess
+
+
 ## Contribute
 
 If you want to contribute to this project, start by forking the repo: <https://github.com/swxben/danny-boy>. Create an issue if applicable, create a branch in your fork, and create a pull request when it's ready. Thanks!

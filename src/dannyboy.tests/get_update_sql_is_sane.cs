@@ -19,7 +19,7 @@ namespace dannyboy.tests
         {
             var sql = DataAccess.GetUpdateSqlFor(typeof(ExampleOne), new[] { "ExampleOneIdentifier" });
 
-            sql.ShouldBeCloseTo(
+            sql.Trim().ShouldBe(
 "UPDATE ExampleOnes SET ExampleOneIntValue = @ExampleOneIntValue, ExampleOneStringProperty = @ExampleOneStringProperty WHERE 1=1 AND ExampleOneIdentifier = @ExampleOneIdentifier");
         }
     }

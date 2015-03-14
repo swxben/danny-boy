@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 
 namespace dannyboy
 {
@@ -67,6 +66,15 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]')
     DROP TABLE {0}", tableName);
 
             ExecuteCommand(sql);
+        }
+
+        public bool TableExists(string tableName)
+        {
+            var query = string.Format(
+                "SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]') AND type IN (N'U')",
+                tableName);
+            
+            return ExecuteQuery(query).Any();
         }
     }
 }

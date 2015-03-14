@@ -27,7 +27,7 @@ namespace dannyboy.tests
         {
             DataAccess
                 .GetInsertSqlFor(typeof(Thing))
-                .ShouldBeCloseTo("INSERT INTO Things(ThingName) VALUES (@ThingName)");
+                .Trim().ShouldBe("INSERT INTO Things(ThingName) VALUES(@ThingName)");
         }
 
         [Test]

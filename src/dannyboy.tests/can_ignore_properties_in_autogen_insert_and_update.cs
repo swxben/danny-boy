@@ -25,14 +25,14 @@ namespace dannyboy.tests
         public void insert_sql_ignores_property()
         {
             var sql = DataAccess.GetInsertSqlFor(typeof(Example));
-            sql.ShouldBeCloseTo("INSERT INTO Examples(ExampleGuid, Name) VALUES(@ExampleGuid, @Name)");
+            sql.Trim().ShouldBe("INSERT INTO Examples(ExampleGuid, Name) VALUES(@ExampleGuid, @Name)");
         }
 
         [Test]
         public void update_sql_ignores_property()
         {
             var sql = DataAccess.GetUpdateSqlFor(typeof(Example), new[] { "ExampleGuid" });
-            sql.ShouldBeCloseTo("UPDATE Examples SET Name = @Name WHERE 1=1 AND ExampleGuid = @ExampleGuid");
+            sql.Trim().ShouldBe("UPDATE Examples SET Name = @Name WHERE 1=1 AND ExampleGuid = @ExampleGuid");
         }
     }
 }

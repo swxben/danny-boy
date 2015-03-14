@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace dannyboy
 {
     public interface IDataAccess
     {
         int ExecuteCommand(string sql, object parameters = null);
+        Task<int> ExecuteCommandAsync(string sql, object parameters = null);
         IEnumerable<dynamic> ExecuteQuery(string sql, object parameters = null);
         IEnumerable<T> ExecuteQuery<T>(string sql, object parameters = null);
         IEnumerable<T> ExecuteQuery<T>(Func<T> factory, string sql, object parameters = null);
@@ -19,6 +21,7 @@ namespace dannyboy
         IEnumerable<dynamic> Select(Func<dynamic, dynamic> transform, string tableName = null, object where = null, string orderBy = null);
         Exception TestConnection();
         void DropTable(string tableName);
+        bool TableExists(string tableName);
         bool Any<T>(object where = null);
         bool Any(Type t, object where = null);
         bool Any(string tableName, object where = null);

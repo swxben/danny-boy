@@ -130,7 +130,7 @@ namespace dannyboy
             foreach (var id in identifiers) identifiersCondition.AppendFormat(" AND {0} = @{0}", id);
 
             return string.Format(
-                "UPDATE {0} SET {1} WHERE 1=1 {2}",
+                "UPDATE {0} SET {1} WHERE 1=1{2}",
                 tableName,
                 set,
                 identifiersCondition);
@@ -166,10 +166,10 @@ namespace dannyboy
         {
             tableName = tableName ?? GetTableName(t);
             var wherePart = GetWhereForCriteria(criteria);
-            var orderByPart = string.IsNullOrEmpty(orderBy) ? "" : string.Format("ORDER BY {0}", orderBy);
+            var orderByPart = string.IsNullOrEmpty(orderBy) ? "" : string.Format(" ORDER BY {0}", orderBy);
 
             return string.Format(
-                "SELECT * FROM {0} {1} {2}",
+                "SELECT * FROM {0}{1}{2}",
                 tableName,
                 wherePart,
                 orderByPart);
@@ -185,7 +185,7 @@ namespace dannyboy
             var wherePart = new StringBuilder();
             if (criteria != null)
             {
-                wherePart.Append(" WHERE 1=1 ");
+                wherePart.Append(" WHERE 1=1");
 
                 foreach (var field in GetAllFieldNames(criteria.GetType()))
                 {
