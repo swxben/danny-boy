@@ -18,7 +18,7 @@ namespace dannyboy.tests
         public void insert_sql_is_correct_for_example_one()
         {
             var sql = DataAccess.GetInsertSqlFor(typeof(ExampleOne));
-            sql.ShouldBeCloseTo(
+            sql.Trim().ShouldBe(
 "INSERT INTO ExampleOnes(ExampleOneIdentifier, ExampleOneIntValue, ExampleOneStringProperty) VALUES(@ExampleOneIdentifier, @ExampleOneIntValue, @ExampleOneStringProperty)");
         }
     }

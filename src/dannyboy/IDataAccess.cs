@@ -19,6 +19,7 @@ namespace dannyboy
         IEnumerable<dynamic> Select(Func<dynamic, dynamic> transform, string tableName = null, object where = null, string orderBy = null);
         Exception TestConnection();
         void DropTable(string tableName);
+        bool TableExists(string tableName);
         bool Any<T>(object where = null);
         bool Any(Type t, object where = null);
         bool Any(string tableName, object where = null);

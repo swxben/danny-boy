@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
+using System.Threading.Tasks;
 
 namespace dannyboy
 {
-    public partial class DataAccess : IDataAccess
+    public partial class DataAccess : IDataAccess, IDataAccessAsync
     {
         readonly string _connectionString = "";
 
@@ -31,152 +31,22 @@ namespace dannyboy
             return "";
         }
 
-        public int ExecuteCommand(string sql, object parameters = null)
+        async Task<SqlConnection> OpenConnectionAsync()
         {
-            using (var connection = OpenConnection())
-            {
-                var command = GetCommand(parameters);
-                command.Connection = connection;
-                command.CommandText = sql;
+            var connection = new SqlConnection(_connectionString);
 
-                return command.ExecuteNonQuery();
-            }
+            await connection.OpenAsync();
+
+            return connection;
         }
 
         SqlConnection OpenConnection()
         {
             var connection = new SqlConnection(_connectionString);
+
             connection.Open();
+
             return connection;
-        }
-
-        public IEnumerable<dynamic> ExecuteQuery(string sql, object parameters = null)
-        {
-            using (var connection = OpenConnection())
-            {
-                var command = GetCommand(parameters);
-                command.Connection = connection;
-                command.CommandText = sql;
-
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var result = new ExpandoObject();
-                        var resultDictionary = result as IDictionary<string, object>;
-
-                        for (var i = 0; i < reader.FieldCount; i++)
-                        {
-                            resultDictionary.Add(reader.GetName(i), DBNull.Value.Equals(reader[i]) ? null : reader[i]);
-                        }
-
-                        yield return result;
-                    }
-                }
-            }
-        }
-
-        public IEnumerable<T> ExecuteQuery<T>(string sql, object parameters = null)
-        {
-            return ExecuteQuery(sql, parameters).Select(result =>
-            {
-                var resultDictionary = result as IDictionary<string, object>;
-                var t = Construct<T>();
-
-                ReadResultIntoObject(resultDictionary, t);
-
-                return t;
-            });
-        }
-
-        public IEnumerable<T> ExecuteQuery<T>(Func<T> factory, string sql, object parameters = null)
-        {
-            return ExecuteQuery(sql, parameters).Select(result =>
-            {
-                var resultDictionary = result as IDictionary<string, object>;
-                var t = factory();
-
-                ReadResultIntoObject(resultDictionary, t);
-
-                return t;
-            });
-        }
-
-        public IEnumerable<T> ExecuteQuery<T>(Func<dynamic, T> transform, string sql, object parameters = null)
-        {
-            return ExecuteQuery(sql, parameters).Select(transform);
-        }
-
-        public dynamic Insert<T>(T value, string tableName = null)
-        {
-            using (var connection = OpenConnection())
-            {
-                var command = GetCommand(value);
-                command.Connection = connection;
-                command.CommandText = GetInsertSqlFor(typeof(T), tableName);
-                command.ExecuteNonQuery();
-                command.CommandText = "SELECT @@IDENTITY AS id";
-                return command.ExecuteScalar();
-            }
-        }
-
-        public void Update<T>(T value, string[] identifiers = null, string tableName = null)
-        {
-            var sql = GetUpdateSqlFor(typeof(T), identifiers, tableName);
-            ExecuteCommand(sql, value);
-        }
-
-        public IEnumerable<T> Select<T>(
-            string tableName = null,
-            object where = null,
-            string orderBy = null
-            )
-        {
-            var sql = GetSelectSqlFor(typeof(T), where, orderBy, tableName);
-            return ExecuteQuery<T>(sql, where);
-        }
-
-        public IEnumerable<T> Select<T>(
-            Func<T> factory,
-            string tableName = null,
-            object where = null,
-            string orderBy = null
-            )
-        {
-
-            var sql = GetSelectSqlFor(typeof(T), where, orderBy, tableName);
-            return ExecuteQuery(factory, sql, where);
-        }
-
-        public IEnumerable<T> Select<T>(
-            Func<dynamic, T> transform,
-            string tableName = null,
-            object where = null,
-            string orderBy = null
-            )
-        {
-            var sql = GetSelectSqlFor(typeof(T), where, orderBy, tableName);
-            return ExecuteQuery(transform, sql, where);
-        }
-
-        public IEnumerable<dynamic> Select(
-            string tableName = null,
-            object where = null,
-            string orderBy = null
-            )
-        {
-            var sql = GetSelectSqlFor(null, where, orderBy, tableName);
-            return ExecuteQuery(sql, where);
-        }
-
-        public IEnumerable<dynamic> Select(
-            Func<dynamic, dynamic> transform,
-            string tableName = null,
-            object where = null,
-            string orderBy = null)
-        {
-            var sql = GetSelectSqlFor(null, where, orderBy, tableName);
-            return ExecuteQuery(transform, sql, where);
         }
 
         public Exception TestConnection()
@@ -194,14 +64,61 @@ namespace dannyboy
             }
         }
 
+        public async Task<Exception> TestConnectionAsync()
+        {
+            try
+            {
+                using (await OpenConnectionAsync())
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+
         public void DropTable(string tableName)
         {
-            var sql = string.Format(@"
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]') AND type IN (N'U'))
-    DROP TABLE {0}", tableName);
+            var sql = GetDropTableSql(tableName);
 
             ExecuteCommand(sql);
         }
 
+        private static string GetDropTableSql(string tableName)
+        {
+            var sql = string.Format(@"
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]') AND type IN (N'U'))
+    DROP TABLE {0}", tableName);
+            return sql;
+        }
+
+        public Task DropTableAsync(string tableName)
+        {
+            return ExecuteCommandAsync(GetDropTableSql(tableName));
+        }
+
+        public bool TableExists(string tableName)
+        {
+            var query = GetTableExistsSql(tableName);
+
+            return ExecuteQuery(query).Any();
+        }
+
+        private static string GetTableExistsSql(string tableName)
+        {
+            var query = string.Format(
+                "SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]') AND type IN (N'U')",
+                tableName);
+            return query;
+        }
+
+        public async Task<bool> TableExistsAsync(string tableName)
+        {
+            var result = await ExecuteQueryAsync(GetTableExistsSql(tableName));
+            
+            return result.Any();
+        }
     }
 }

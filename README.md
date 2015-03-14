@@ -1,7 +1,7 @@
 Danny Boy
 =========
 
-Simple data access layer for SQL Server.
+Simple micro-ORM for SQL Server, with first-class support for dynamics and async/await.
 
 
 ## Versioning
@@ -18,7 +18,18 @@ Install the engine via [NuGet](http://nuget.org/packages/dannyboy), either in Vi
 
 Create a new `dannyboy.DataAccess` instance and pass in the database connection string (do this with your favourite IoC container):
 
-    IDataAccess dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; User Id=sa; Password=test;");
+    IDataAccess dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; Integrated Security=True;");
+
+Get an `IDataAccessAsync` for asynchronous versions of all of the methods on `IDataAccess`:
+
+    IDataAccessAsync dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; Integrated Security=True;");
+
+Each of the below methods has an asynchronous equivalent in the `IDataAccessAsync` interface.
+
+
+### Dynamic support
+
+Although the below examples are strongly typed, Danny Boy uses dynamics under the covers, and each method has first class support for dynamics.
 
 
 ### Select
@@ -246,10 +257,23 @@ If you want to contribute to this project, start by forking the repo: <https://g
 
 ## Building, running tests and the NuGet package
 
-THe VS2010 solution is in the root folder. Unit tests (src\swxben.dannyboy.Tests\bin\Debug\swxben.dannyboy.Tests.dll) can be run in a console using `tests.bat`. The NuGet package can be built by running `build-nuget-package.cmd`. A database named `swxben_dataaccess` running on `.\sqlexpress` is needed.
+THe VS2010 solution is in the root folder. Unit tests (src\swxben.dannyboy.Tests\bin\Debug\swxben.dannyboy.Tests.dll) can be run in a console using `tests.bat`. The NuGet package can be built by running `build-nuget-package.cmd`. A database named `swxben_dataaccess` running on `.\sqlexpress` with integrated access is needed.
 
 
 ## Version history
+
+### 4.0.0
+
+- 3.0.0 wasn't on master/head so had a number of regressions that got deployed to NuGet. Whoops. 
+- Switch to .NET 4.5.1 (breaking change)
+- Async versions of all methods on `IDataAccess`, via the `IDataAccessAsync` interface
+- Change license to Apache License Version 2.0
+
+### ~~3.0.0~~ regression issues
+
+- Switch to .NET 4.5.1 (breaking change)
+- Async versions of all methods on `IDataAccess`, via the `IDataAccessAsync` interface
+- Change license to Apache License Version 2.0
 
 ### 2.6.0
 
@@ -257,9 +281,10 @@ THe VS2010 solution is in the root folder. Unit tests (src\swxben.dannyboy.Tests
 - Search for a default public, protected or private constructor when attempting to instantiate a new entity type
 
 
-## Licenses
+## License
 
-All files [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) unless otherwise specified.
+[Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
 
 ### Third party licenses
 

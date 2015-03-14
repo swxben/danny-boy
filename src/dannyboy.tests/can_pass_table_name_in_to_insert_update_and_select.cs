@@ -25,7 +25,7 @@ namespace dannyboy.tests
         {
             var thing = new { ColA = "aaa", ColB = "bbb" };
             var sql = DataAccess.GetInsertSqlFor(thing.GetType(), "Things");
-            sql.ShouldBeCloseTo("INSERT INTO Things(ColA, ColB) VALUES(@ColA, @ColB)");
+            sql.Trim().ShouldBe("INSERT INTO Things(ColA, ColB) VALUES(@ColA, @ColB)");
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace dannyboy.tests
         {
             var thing = new { ColA = "aaa", ColB = "bbb", Id = 1 };
             var sql = DataAccess.GetUpdateSqlFor(thing.GetType(), new[] { "Id" }, "Things");
-            sql.ShouldBeCloseTo("UPDATE Things SET ColA = @ColA, ColB = @ColB WHERE 1=1 AND Id = @Id");
+            sql.Trim().ShouldBe("UPDATE Things SET ColA = @ColA, ColB = @ColB WHERE 1=1 AND Id = @Id");
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace dannyboy.tests
         public void select_sql_is_sane()
         {
             var sql = DataAccess.GetSelectSqlFor(null, null, null, "Things");
-            sql.ShouldBeCloseTo("SELECT * FROM Things");
+            sql.Trim().ShouldBe("SELECT * FROM Things");
         }
 
         [Test]
