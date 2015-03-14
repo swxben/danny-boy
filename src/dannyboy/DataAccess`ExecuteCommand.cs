@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace dannyboy
 {
@@ -8,17 +9,28 @@ namespace dannyboy
         {
             using (var connection = OpenConnection())
             {
-                var command = GetCommand(parameters);
-                command.Connection = connection;
-                command.CommandText = sql;
+                var command = GetCommandForExecution(sql, parameters, connection);
 
                 return command.ExecuteNonQuery();
             }
         }
 
-        public Task<int> ExecuteCommandAsync(string sql, object parameters = null)
+        public async Task<int> ExecuteCommandAsync(string sql, object parameters = null)
         {
-            return Task.FromResult(ExecuteCommand(sql, parameters));
+            using (var connection = await OpenConnectionAsync())
+            {
+                var command = GetCommandForExecution(sql, parameters, connection);
+                
+                return await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        private static SqlCommand GetCommandForExecution(string sql, object parameters, SqlConnection connection)
+        {
+            var command = GetCommand(parameters);
+            command.Connection = connection;
+            command.CommandText = sql;
+            return command;
         }
     }
 }

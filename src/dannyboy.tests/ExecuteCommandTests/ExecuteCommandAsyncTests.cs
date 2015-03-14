@@ -10,13 +10,13 @@ namespace dannyboy.tests.ExecuteCommandTests
     public class ExecuteCommandAsyncTests : DataAccessTestBase
     {
         [Test]
-        public void CanCreateAndDropTable()
+        public void CanCreateTableAsync()
         {
-            //DataAccess
-            //    .ExecuteCommandAsync("CREATE TABLE [Persons]([Name] NVARCHAR(MAX))")
-            //    .Result.ShouldBe(1);
+            DataAccess
+                .ExecuteCommandAsync("CREATE TABLE [Persons]([Name] NVARCHAR(MAX))")
+                .Result.ShouldBe(-1);
 
-            //DataAccess.
+            DataAccess.TableExists("Persons").ShouldBe(true);
         }
     }
 }
