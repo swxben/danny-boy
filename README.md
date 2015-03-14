@@ -246,7 +246,7 @@ If you want to contribute to this project, start by forking the repo: <https://g
 
 ## Building, running tests and the NuGet package
 
-THe VS2010 solution is in the root folder. Unit tests (src\swxben.dannyboy.Tests\bin\Debug\swxben.dannyboy.Tests.dll) can be run in a console using `tests.bat`. The NuGet package can be built by running `build-nuget-package.cmd`. A database named `swxben_dataaccess` running on `.\sqlexpress` is needed.
+THe VS2010 solution is in the root folder. Unit tests (src\swxben.dannyboy.Tests\bin\Debug\swxben.dannyboy.Tests.dll) can be run in a console using `tests.bat`. The NuGet package can be built by running `build-nuget-package.cmd`. A database named `swxben_dataaccess` running on `.\sqlexpress` with integrated access is needed.
 
 
 ## Version history
