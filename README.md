@@ -279,7 +279,7 @@ THe VS2010 solution is in the root folder. Unit tests (src\swxben.dannyboy.Tests
 
 ## Version history
 
-### 4.1.0 *in progress*
+### 4.1.0
 
 - add `Delete` and `DeleteAsync` methods
 - add `IDataAccessAsync` to `IDataAccess` so it presents as one interface.

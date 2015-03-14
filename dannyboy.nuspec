@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>dannyboy</id>
-    <version>4.0.0</version>
+    <version>4.1.0</version>
     <title>dannyboy</title>
     <authors>Software By Ben, Ben Scott, swxben, belfryimages</authors>
     <owners>Software By Ben, Ben Scott, swxben, belfryimages</owners>
@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Simple micro-ORM for SQL Server, with first-class support for dynamics and async/await</description>
     <summary>Simple micro-ORM for SQL Server, with first-class support for dynamics and async/await</summary>
-    <releaseNotes>Automatically create entity types with public, protected or private default constructors</releaseNotes>
+    <releaseNotes>Add async methods to IDataAccess, add Delete methods</releaseNotes>
     <tags>sqlserver dataaccess dal orm microorm dannyboy</tags>
   </metadata>
   <files>
