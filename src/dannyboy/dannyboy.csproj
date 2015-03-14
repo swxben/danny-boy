@@ -56,6 +56,7 @@
     <Compile Include="DataAccess`Update.cs" />
     <Compile Include="IDataAccess.cs" />
     <Compile Include="InvalidEntityTypeException.cs" />
+    <Compile Include="IDataAccessAsync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

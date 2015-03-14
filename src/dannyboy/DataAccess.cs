@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace dannyboy
 {
-    public partial class DataAccess : IDataAccess
+    public partial class DataAccess : IDataAccess, IDataAccessAsync
     {
         readonly string _connectionString = "";
 
@@ -64,22 +64,61 @@ namespace dannyboy
             }
         }
 
+        public async Task<Exception> TestConnectionAsync()
+        {
+            try
+            {
+                using (await OpenConnectionAsync())
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+
         public void DropTable(string tableName)
         {
-            var sql = string.Format(@"
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]') AND type IN (N'U'))
-    DROP TABLE {0}", tableName);
+            var sql = GetDropTableSql(tableName);
 
             ExecuteCommand(sql);
         }
 
+        private static string GetDropTableSql(string tableName)
+        {
+            var sql = string.Format(@"
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]') AND type IN (N'U'))
+    DROP TABLE {0}", tableName);
+            return sql;
+        }
+
+        public Task DropTableAsync(string tableName)
+        {
+            return ExecuteCommandAsync(GetDropTableSql(tableName));
+        }
+
         public bool TableExists(string tableName)
+        {
+            var query = GetTableExistsSql(tableName);
+
+            return ExecuteQuery(query).Any();
+        }
+
+        private static string GetTableExistsSql(string tableName)
         {
             var query = string.Format(
                 "SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]') AND type IN (N'U')",
                 tableName);
+            return query;
+        }
+
+        public async Task<bool> TableExistsAsync(string tableName)
+        {
+            var result = await ExecuteQueryAsync(GetTableExistsSql(tableName));
             
-            return ExecuteQuery(query).Any();
+            return result.Any();
         }
     }
 }

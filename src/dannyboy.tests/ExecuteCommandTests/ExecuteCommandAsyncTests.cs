@@ -12,7 +12,7 @@ namespace dannyboy.tests.ExecuteCommandTests
         [Test]
         public void CanCreateTableAsync()
         {
-            DataAccess
+            DataAccessAsync
                 .ExecuteCommandAsync("CREATE TABLE [Persons]([Name] NVARCHAR(MAX))")
                 .Result.ShouldBe(-1);
 

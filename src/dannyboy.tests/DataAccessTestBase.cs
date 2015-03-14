@@ -4,7 +4,9 @@ namespace dannyboy.tests
 {
     public abstract class DataAccessTestBase
     {
-        protected IDataAccess DataAccess = new DataAccess(TestConfiguration.ConnectionString);
+        readonly DataAccess _dataAccess = new DataAccess(TestConfiguration.ConnectionString);
+        protected IDataAccess DataAccess { get { return _dataAccess; } }
+        protected IDataAccessAsync DataAccessAsync { get { return _dataAccess; } }
 
         protected void CreatePersonsTable()
         {
