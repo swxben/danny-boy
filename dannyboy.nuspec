@@ -2,12 +2,12 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>dannyboy</id>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
     <title>dannyboy</title>
     <authors>Software By Ben, Ben Scott, swxben, belfryimages</authors>
     <owners>Software By Ben, Ben Scott, swxben, belfryimages</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
-    <projectUrl>https://github.com/swxben/dannyboy</projectUrl>
+    <projectUrl>https://github.com/swxben/danny-boy</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Simple micro-ORM for SQL Server, with first-class support for dynamics and async/await</description>
     <summary>Simple micro-ORM for SQL Server, with first-class support for dynamics and async/await</summary>
