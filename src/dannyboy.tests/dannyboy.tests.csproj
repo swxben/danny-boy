@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="any_method_for_checking_existence_of_data.cs" />
     <Compile Include="BuiltInInsertWorks.cs" />
+    <Compile Include="InsertTests\BuiltInInsertWorks.cs" />
     <Compile Include="built_in_select_works.cs" />
     <Compile Include="built_in_update_works.cs" />
     <Compile Include="can_decorate_identifier_column_for_update_operations.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="get_select_sql_is_sane.cs" />
     <Compile Include="get_update_sql_is_sane.cs" />
     <Compile Include="ignored_properties_still_get_assigned_when_query_includes_values_for_them.cs" />
+    <Compile Include="InsertTests\InsertAsyncTests.cs" />
     <Compile Include="insert_returns_identity.cs" />
     <Compile Include="int_identity_column_is_not_included_in_insert_query.cs" />
     <Compile Include="nullable_datetime_works.cs" />

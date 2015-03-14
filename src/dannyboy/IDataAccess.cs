@@ -8,7 +8,6 @@ namespace dannyboy
     {
         int ExecuteCommand(string sql, object parameters = null);
         Task<int> ExecuteCommandAsync(string sql, object parameters = null);
-        
         IEnumerable<dynamic> ExecuteQuery(string sql, object parameters = null);
         Task<IEnumerable<dynamic>> ExecuteQueryAsync(string sql, object parameters = null);
         IEnumerable<T> ExecuteQuery<T>(string sql, object parameters = null);
@@ -19,6 +18,8 @@ namespace dannyboy
         Task<IEnumerable<T>> ExecuteQueryAsync<T>(Func<dynamic, T> transform, string sql, object parameters = null);
         
         dynamic Insert<T>(T value, string tableName = null);
+        Task<dynamic> InsertAsync<T>(T value, string tableName = null);
+
         void Update<T>(T value, string[] identifiers = null, string tableName = null);
         IEnumerable<T> Select<T>(string tableName = null, object where = null, string orderBy = null);
         IEnumerable<T> Select<T>(Func<T> factory, string tableName = null, object where = null, string orderBy = null);
