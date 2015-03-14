@@ -70,6 +70,7 @@
     <Compile Include="SelectToFieldAccessibilityTests.cs" />
     <Compile Include="DataAccessTestBase.cs" />
     <Compile Include="ExecuteCommandTests\ExecuteCommandAsyncTests.cs" />
+    <Compile Include="ExecuteQueryTests\ExecuteQueryAsyncTests.cs" />
     <Compile Include="execute_scalar_tests.cs" />
     <Compile Include="GetDatabaseName_is_sane.cs" />
     <Compile Include="get_insert_sql_is_sane.cs" />
