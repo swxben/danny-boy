@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace dannyboy
 {
-    public interface IDataAccess
+    public interface IDataAccess : IDataAccessAsync
     {
         int ExecuteCommand(string sql, object parameters = null);
         IEnumerable<dynamic> ExecuteQuery(string sql, object parameters = null);
