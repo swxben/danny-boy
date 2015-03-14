@@ -15,10 +15,10 @@ namespace dannyboy.tests.InsertTests
         {
             CreatePersonsTable();
 
-            DataAccessAsync.InsertAsync(new { Name = "George" }, "Persons").Wait();
-            DataAccessAsync.InsertAsync(new { Name = "Ringo" }, "Persons").Wait();
-            DataAccessAsync.InsertAsync(new { Name = "Paul" }, "Persons").Wait();
-            DataAccessAsync.InsertAsync(new { Name = "John" }, "Persons").Wait();
+            DataAccess.InsertAsync(new { Name = "George" }, "Persons").Wait();
+            DataAccess.InsertAsync(new { Name = "Ringo" }, "Persons").Wait();
+            DataAccess.InsertAsync(new { Name = "Paul" }, "Persons").Wait();
+            DataAccess.InsertAsync(new { Name = "John" }, "Persons").Wait();
 
             DataAccess.ExecuteScalar<int>("SELECT COUNT(*) FROM [Persons]").ShouldBe(4);
         }

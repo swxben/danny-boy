@@ -169,10 +169,30 @@ namespace dannyboy
             var orderByPart = string.IsNullOrEmpty(orderBy) ? "" : string.Format(" ORDER BY {0}", orderBy);
 
             return string.Format(
-                "SELECT * FROM {0}{1}{2}",
+                "SELECT * FROM [{0}]{1}{2}",
                 tableName,
                 wherePart,
                 orderByPart);
+        }
+
+        public static string GetDeleteSqlFor(Type t, object criteria, string tableName)
+        {
+            return string.Format(
+                "DELETE FROM [{0}]{1}",
+                tableName ?? GetTableName(t),
+                GetWhereForCriteria(criteria));
+        }
+
+        public static string GetDeleteSqlFor(object o)
+        {
+            var condition = GetIdentifiers(o.GetType()).Aggregate(
+                "1=1",
+                (acc, x) => string.Format("{1} AND [{0}] = @{0}", x, acc));
+            
+            return string.Format(
+                "DELETE FROM [{0}] WHERE {1}",
+                GetTableName(o.GetType()),
+                condition);
         }
 
         static string GetTableName(Type t)
@@ -189,7 +209,7 @@ namespace dannyboy
 
                 foreach (var field in GetAllFieldNames(criteria.GetType()))
                 {
-                    wherePart.AppendFormat(" AND {0} = @{0}", field);
+                    wherePart.AppendFormat(" AND [{0}] = @{0}", field);
                 }
             }
             return wherePart.ToString();

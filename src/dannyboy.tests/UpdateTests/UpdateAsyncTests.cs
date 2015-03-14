@@ -23,7 +23,7 @@ CREATE TABLE [Persons](
 
             person.Name = "Updated name";
 
-            DataAccessAsync.UpdateAsync(person).Wait();
+            DataAccess.UpdateAsync(person).Wait();
 
             DataAccess.ExecuteScalar<string>("SELECT TOP 1 Name FROM Persons")
                 .ShouldBe("Updated name");

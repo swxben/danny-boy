@@ -132,6 +132,27 @@ The table name can be passed in explicitly without relying on the type name:
     UPDATE MyThings SET MyName = 'Ben' WHERE MyId = 4
 
 
+### Delete
+
+Delete can be called with an object specifying the `WHERE` criteria:
+
+    dataAccess.Delete<MyThing>(new { Id = 123 });
+    dataAccess.Delete(typeof(MyThing), new { Id = 123 });
+    dataAccess.Delete(new { Id = 123 }, "MyThings");
+
+Or with a strongly typed object with `Identifier` attributes:
+
+    class MyThing {
+        [DataAccess.Identifier]
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
+    var thing = dataAccess.Select(new { Id = 123 }).Single();
+    // ...
+    dataAccess.Delete(thing);
+
+
 ### Execute arbitrary queries
 
 There are two versions of `ExecuteQuery()`, one returns strongly-typed DTOs, the other returns dynamics:
@@ -258,8 +279,9 @@ THe VS2010 solution is in the root folder. Unit tests (src\swxben.dannyboy.Tests
 
 ## Version history
 
-### 4.1.0
+### 4.1.0 *in progress*
 
+- add `Delete` and `DeleteAsync` methods
 - add `IDataAccessAsync` to `IDataAccess` so it presents as one interface.
 
 ### 4.0.0

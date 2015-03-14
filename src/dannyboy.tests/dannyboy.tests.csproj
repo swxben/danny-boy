@@ -54,6 +54,19 @@
   <ItemGroup>
     <Compile Include="any_method_for_checking_existence_of_data.cs" />
     <Compile Include="BuiltInInsertWorks.cs" />
+    <Compile Include="DeleteTests\AsyncDeleteWithGeneric.cs" />
+    <Compile Include="DeleteTests\AsyncDeleteWithSpecifiedTableName.cs" />
+    <Compile Include="DeleteTests\AsyncDeleteWithStronglyTypedInstance.cs" />
+    <Compile Include="DeleteTests\AsyncDeleteWithType.cs" />
+    <Compile Include="DeleteTests\DeleteTestBase.cs" />
+    <Compile Include="DeleteTests\DeleteWithGeneric.cs" />
+    <Compile Include="DeleteTests\DeleteWithSpecifiedTableName.cs" />
+    <Compile Include="DeleteTests\DeleteWithStronglyTypedInstance.cs" />
+    <Compile Include="DeleteTests\DeleteWithType.cs" />
+    <Compile Include="GetDeleteSqlForTests\WithClass.cs" />
+    <Compile Include="GetDeleteSqlForTests\WithOnlyTableNameSpecified.cs" />
+    <Compile Include="GetDeleteSqlForTests\WithStronglyTypedInstance.cs" />
+    <Compile Include="GetDeleteSqlForTests\WithTableNameSpecified.cs" />
     <Compile Include="InsertTests\BuiltInInsertWorks.cs" />
     <Compile Include="built_in_select_works.cs" />
     <Compile Include="built_in_update_works.cs" />

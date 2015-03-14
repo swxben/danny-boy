@@ -4,9 +4,7 @@ namespace dannyboy.tests
 {
     public abstract class DataAccessTestBase
     {
-        readonly DataAccess _dataAccess = new DataAccess(TestConfiguration.ConnectionString);
-        protected IDataAccess DataAccess { get { return _dataAccess; } }
-        protected IDataAccessAsync DataAccessAsync { get { return _dataAccess; } }
+        protected readonly IDataAccess DataAccess = new DataAccess(TestConfiguration.ConnectionString);
 
         protected void CreatePersonsTable()
         {
@@ -15,7 +13,7 @@ namespace dannyboy.tests
         }
 
         [TearDown]
-        public void TearDown()
+        public virtual void TearDown()
         {
             DataAccess.DropTable("Persons");
         }

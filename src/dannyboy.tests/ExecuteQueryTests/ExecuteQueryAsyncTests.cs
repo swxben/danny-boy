@@ -20,7 +20,7 @@ namespace dannyboy.tests.ExecuteQueryTests
             DataAccess.Insert(new { Name = "Paul" }, "Persons");
             DataAccess.Insert(new { Name = "John" }, "Persons");
 
-            var result = DataAccessAsync
+            var result = DataAccess
                 .ExecuteQueryAsync("SELECT Name FROM Persons WHERE Name LIKE '%ingo%'")
                 .Result
                 .Single();
