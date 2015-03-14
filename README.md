@@ -249,8 +249,6 @@ Returns a boolean indicating if there are any rows in the specified table that s
 - `GetDatabaseName()` returns the name of the database, extracted from the connection string.
 
 
-
-
 ## Contribute
 
 If you want to contribute to this project, start by forking the repo: <https://github.com/swxben/danny-boy>. Create an issue if applicable, create a branch in your fork, and create a pull request when it's ready. Thanks!
@@ -264,7 +262,14 @@ THe VS2010 solution is in the root folder. Unit tests (src\swxben.dannyboy.Tests
 
 ## Version history
 
-### 3.0.0
+### 4.0.0
+
+- 3.0.0 wasn't on master/head so had a number of regressions that got deployed to NuGet. Whoops. 
+- Switch to .NET 4.5.1 (breaking change)
+- Async versions of all methods on `IDataAccess`, via the `IDataAccessAsync` interface
+- Change license to Apache License Version 2.0
+
+### ~~3.0.0~~ regression issues
 
 - Switch to .NET 4.5.1 (breaking change)
 - Async versions of all methods on `IDataAccess`, via the `IDataAccessAsync` interface
