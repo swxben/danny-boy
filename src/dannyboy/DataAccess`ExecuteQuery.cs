@@ -82,7 +82,7 @@ namespace dannyboy
             return t;
         }
 
-        public async Task<IEnumerable<T>> ExecuteQueryAsync<T>(string sql, object parameters = null) where T : new()
+        public async Task<IEnumerable<T>> ExecuteQueryAsync<T>(string sql, object parameters = null)
         {
             var results = await ExecuteQueryAsync(sql, parameters);
 

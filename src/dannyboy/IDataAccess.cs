@@ -11,22 +11,26 @@ namespace dannyboy
         IEnumerable<dynamic> ExecuteQuery(string sql, object parameters = null);
         Task<IEnumerable<dynamic>> ExecuteQueryAsync(string sql, object parameters = null);
         IEnumerable<T> ExecuteQuery<T>(string sql, object parameters = null);
-        Task<IEnumerable<T>> ExecuteQueryAsync<T>(string sql, object parameters = null) where T : new();
+        Task<IEnumerable<T>> ExecuteQueryAsync<T>(string sql, object parameters = null);
         IEnumerable<T> ExecuteQuery<T>(Func<T> factory, string sql, object parameters = null);
         Task<IEnumerable<T>> ExecuteQueryAsync<T>(Func<T> factory, string sql, object parameters = null);
         IEnumerable<T> ExecuteQuery<T>(Func<dynamic, T> transform, string sql, object parameters = null);
         Task<IEnumerable<T>> ExecuteQueryAsync<T>(Func<dynamic, T> transform, string sql, object parameters = null);
         dynamic Insert<T>(T value, string tableName = null);
         Task<dynamic> InsertAsync<T>(T value, string tableName = null);
-
         void Update<T>(T value, string[] identifiers = null, string tableName = null);
         Task UpdateAsync<T>(T value, string[] identifiers = null, string tableName = null);
-        
         IEnumerable<T> Select<T>(string tableName = null, object where = null, string orderBy = null);
+        Task<IEnumerable<T>> SelectAsync<T>(string tableName = null, object where = null, string orderBy = null);
         IEnumerable<T> Select<T>(Func<T> factory, string tableName = null, object where = null, string orderBy = null);
+        Task<IEnumerable<T>> SelectAsync<T>(Func<T> factory, string tableName = null, object where = null, string orderBy = null);
         IEnumerable<T> Select<T>(Func<dynamic, T> transform, string tableName = null, object where = null, string orderBy = null);
+        Task<IEnumerable<T>> SelectAsync<T>(Func<dynamic, T> transform, string tableName = null, object where = null, string orderBy = null);
         IEnumerable<dynamic> Select(string tableName = null, object where = null, string orderBy = null);
+        Task<IEnumerable<dynamic>> SelectAsync(string tableName = null, object where = null, string orderBy = null);
         IEnumerable<dynamic> Select(Func<dynamic, dynamic> transform, string tableName = null, object where = null, string orderBy = null);
+        Task<IEnumerable<dynamic>> SelectAsync(Func<dynamic, dynamic> transform, string tableName = null, object where = null, string orderBy = null);
+        
         Exception TestConnection();
         void DropTable(string tableName);
         bool TableExists(string tableName);
