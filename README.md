@@ -1,7 +1,7 @@
 Danny Boy
 =========
 
-Simple data access layer for SQL Server.
+Simple micro-ORM for SQL Server, with first-class support for dynamics and async/await.
 
 
 ## Versioning
@@ -18,7 +18,18 @@ Install the engine via [NuGet](http://nuget.org/packages/dannyboy), either in Vi
 
 Create a new `dannyboy.DataAccess` instance and pass in the database connection string (do this with your favourite IoC container):
 
-    IDataAccess dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; User Id=sa; Password=test;");
+    IDataAccess dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; Integrated Security=True;");
+
+Get an `IDataAccessAsync` for asynchronous versions of all of the methods on `IDataAccess`:
+
+    IDataAccessAsync dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; Integrated Security=True;");
+
+Each of the below methods has an asynchronous equivalent in the `IDataAccessAsync` interface.
+
+
+### Dynamic support
+
+Although the below examples are strongly typed, Danny Boy uses dynamics under the covers, and each method has first class support for dynamics.
 
 
 ### Select
@@ -238,12 +249,6 @@ Returns a boolean indicating if there are any rows in the specified table that s
 - `GetDatabaseName()` returns the name of the database, extracted from the connection string.
 
 
-## Versions
-
-### 3.0.0
-
-- Switch to .NET 4.5.1 (breaking change)
-- Async versions of all methods on IDataAccess
 
 
 ## Contribute
@@ -259,15 +264,22 @@ THe VS2010 solution is in the root folder. Unit tests (src\swxben.dannyboy.Tests
 
 ## Version history
 
+### 3.0.0
+
+- Switch to .NET 4.5.1 (breaking change)
+- Async versions of all methods on `IDataAccess`, via the `IDataAccessAsync` interface
+- Change license to Apache License Version 2.0
+
 ### 2.6.0
 
 - Remove entity type `new()` generic constraint on query methods
 - Search for a default public, protected or private constructor when attempting to instantiate a new entity type
 
 
-## Licenses
+## License
 
-All files [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) unless otherwise specified.
+[Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
 
 ### Third party licenses
 

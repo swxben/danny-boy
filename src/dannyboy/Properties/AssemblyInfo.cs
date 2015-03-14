@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("dannyboy")]
-[assembly: AssemblyDescription("Simple data access layer for SQL Server")]
+[assembly: AssemblyDescription("Simple micro-ORM for SQL Server")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Software by Ben Pty Ltd")]
 [assembly: AssemblyProduct("dannyboy")]
-[assembly: AssemblyCopyright("CC BY-SA 3.0")]
+[assembly: AssemblyCopyright("Apache License Version 2.0")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.6.0.0")]
-[assembly: AssemblyFileVersion("2.6.0.0")]
+[assembly: AssemblyVersion("3.0.0.0")]
+[assembly: AssemblyFileVersion("3.0.0.0")]

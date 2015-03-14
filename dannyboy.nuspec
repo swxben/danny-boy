@@ -2,19 +2,19 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>dannyboy</id>
-    <version>2.6.0</version>
+    <version>3.0.0</version>
     <title>dannyboy</title>
     <authors>Software By Ben, Ben Scott, swxben, belfryimages</authors>
     <owners>Software By Ben, Ben Scott, swxben, belfryimages</owners>
-    <licenseUrl>http://creativecommons.org/licenses/by-sa/3.0/</licenseUrl>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
     <projectUrl>https://github.com/swxben/dannyboy</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Simple data access layer for SQL Server</description>
-    <summary>Simple data access layer for SQL Server</summary>
+    <description>Simple micro-ORM for SQL Server, with first-class support for dynamics and async/await</description>
+    <summary>Simple micro-ORM for SQL Server, with first-class support for dynamics and async/await</summary>
     <releaseNotes>Automatically create entity types with public, protected or private default constructors</releaseNotes>
-    <tags>sqlserver dataaccess dal dannyboy</tags>
+    <tags>sqlserver dataaccess dal orm microorm dannyboy</tags>
   </metadata>
   <files>
-    <file src="src\dannyboy\bin\Release\dannyboy.dll" target="lib\net40\dannyboy.dll" />
+    <file src="src\dannyboy\bin\Release\dannyboy.dll" target="lib\net45\dannyboy.dll" />
   </files>
 </package>
