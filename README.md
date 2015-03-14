@@ -20,11 +20,7 @@ Create a new `dannyboy.DataAccess` instance and pass in the database connection 
 
     IDataAccess dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; Integrated Security=True;");
 
-Get an `IDataAccessAsync` for asynchronous versions of all of the methods on `IDataAccess`:
-
-    IDataAccessAsync dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; Integrated Security=True;");
-
-Each of the below methods has an asynchronous equivalent in the `IDataAccessAsync` interface.
+Each of the below methods (where appropriate) has an asynchronous equivalent.
 
 
 ### Dynamic support
@@ -261,6 +257,10 @@ THe VS2010 solution is in the root folder. Unit tests (src\swxben.dannyboy.Tests
 
 
 ## Version history
+
+### 4.1.0
+
+- add `IDataAccessAsync` to `IDataAccess` so it presents as one interface.
 
 ### 4.0.0
 

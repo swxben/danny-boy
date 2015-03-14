@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace dannyboy
 {
-    public partial class DataAccess : IDataAccess, IDataAccessAsync
+    public partial class DataAccess : IDataAccess
     {
         readonly string _connectionString = "";
 
