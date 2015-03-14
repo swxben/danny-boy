@@ -86,6 +86,7 @@
     <Compile Include="select_with_transform_function.cs" />
     <Compile Include="TableExistsTests\TableExistsTests.cs" />
     <Compile Include="TestConfiguration.cs" />
+    <Compile Include="UpdateTests\UpdateAsyncTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

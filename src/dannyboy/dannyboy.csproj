@@ -53,6 +53,7 @@
     <Compile Include="DataAccess`Insert.cs" />
     <Compile Include="DataAccess`Select.cs" />
     <Compile Include="DataAccess`static.cs" />
+    <Compile Include="DataAccess`Update.cs" />
     <Compile Include="IDataAccess.cs" />
     <Compile Include="InvalidEntityTypeException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -49,13 +49,6 @@ namespace dannyboy
             return connection;
         }
 
-        public void Update<T>(T value, string[] identifiers = null, string tableName = null)
-        {
-            var sql = GetUpdateSqlFor(typeof(T), identifiers, tableName);
-            ExecuteCommand(sql, value);
-        }
-
-
         public Exception TestConnection()
         {
             try
