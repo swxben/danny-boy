@@ -33,5 +33,7 @@ namespace dannyboy
         void Delete(Type t, object @where, string tableName = null);
         void Delete(object @where, string tableName);
         void Delete(object instance);
+        void Truncate(string tableName);
+        void Truncate<T>();
     }
 }

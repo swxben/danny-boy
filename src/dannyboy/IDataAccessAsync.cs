@@ -33,5 +33,7 @@ namespace dannyboy
         Task DeleteAsync(Type t, object @where, string tableName = null);
         Task DeleteAsync(object @where, string tableName);
         Task DeleteAsync(object instance);
+        Task TruncateAsync(string tableName);
+        Task TruncateAsync<T>();
     }
 }

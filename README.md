@@ -262,6 +262,7 @@ Returns a boolean indicating if there are any rows in the specified table that s
 ### Other methods
 
 - `DropTable(string tableName)` drops the specified table if it exists. This is useful for automated tests.
+- `Truncate(string tableName)` and `Truncate<T>()` truncates (drops all rows from) the specified (or inferred) table, without dropping the table schema itself.
 - `TestConnection()` returns any exception thrown when opening the connection. If there are no exceptions, null is returned. This is used to test the connection without bombing out the application.
 - `GetDatabaseName()` returns the name of the database, extracted from the connection string.
 
@@ -278,6 +279,10 @@ THe VS2010 solution is in the root folder. Unit tests (src\swxben.dannyboy.Tests
 
 
 ## Version history
+
+### 4.2.0
+
+- Add `Truncate` and `TruncateAsync` methods
 
 ### 4.1.0
 

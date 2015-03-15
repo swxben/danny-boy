@@ -99,6 +99,11 @@
     <Compile Include="select_with_transform_function.cs" />
     <Compile Include="TableExistsTests\TableExistsTests.cs" />
     <Compile Include="TestConfiguration.cs" />
+    <Compile Include="TruncateTests\AsyncWithGenericType.cs" />
+    <Compile Include="TruncateTests\AsyncWithTableName.cs" />
+    <Compile Include="TruncateTests\TruncateTestsBase.cs" />
+    <Compile Include="TruncateTests\WithGenericType.cs" />
+    <Compile Include="TruncateTests\WithTableName.cs" />
     <Compile Include="UpdateTests\UpdateAsyncTests.cs" />
   </ItemGroup>
   <ItemGroup>

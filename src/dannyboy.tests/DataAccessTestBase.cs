@@ -18,5 +18,9 @@ namespace dannyboy.tests
             DataAccess.DropTable("Persons");
         }
 
+        protected class Person
+        {
+            public string Name { get; set; }
+        }
     }
 }
